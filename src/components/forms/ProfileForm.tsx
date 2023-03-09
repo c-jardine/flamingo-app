@@ -16,7 +16,9 @@ const ProfileForm = (props: ProfileFormProps) => {
   return (
     <>
       <Text style={{ fontSize: 32, fontWeight: '700' }}>Profile</Text>
-      <Text style={{marginBottom: 32}}>Update your profile to continue. You can change this later.</Text>
+      <Text style={{ marginBottom: 32 }}>
+        Finish setting up your profile to continue. You can always update it later.
+      </Text>
       <AuthInput label='Email' value={session?.user.email} disabled />
 
       <Divider style={{ marginVertical: 16 }} />
