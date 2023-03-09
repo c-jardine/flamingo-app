@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { PrimaryButton } from '../../components/buttons';
 import { SignOutDialog } from '../../components/dialogs';
@@ -17,12 +17,7 @@ const ProfileCreationScreen = () => {
   const [loading, setLoading] = useState(false);
   const { profile, updateProfile } = React.useContext(ProfileContext);
 
-  const {
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Profile>({
+  const methods = useForm<Profile>({
     defaultValues: React.useMemo(() => {
       if (profile) {
         return profile;
@@ -35,7 +30,7 @@ const ProfileCreationScreen = () => {
    */
   React.useEffect(() => {
     if (profile) {
-      reset(profile);
+      methods.reset(profile);
     }
   }, [profile]);
 
@@ -43,15 +38,15 @@ const ProfileCreationScreen = () => {
    * Handle profile updating.
    * @param data The data to update the profile with.
    */
-  const _updateProfile = async (data: Profile) => {
+  const _updateProfile = (data: Profile) => {
     setLoading(true);
-    await updateProfile(data);
+    updateProfile(data);
     setLoading(false);
   };
 
   return (
     <MainLayout>
-      <>
+      <FormProvider {...methods}>
         <View
           style={{
             paddingTop: 96,
@@ -62,7 +57,7 @@ const ProfileCreationScreen = () => {
             borderBottomRightRadius: 32,
           }}
         >
-          <ProfileForm session={session!} control={control} errors={errors} />
+          <ProfileForm />
         </View>
         <View
           style={{
@@ -75,13 +70,13 @@ const ProfileCreationScreen = () => {
           <PrimaryButton variant='ghost' title='Sign Out' onPress={onOpen} />
           <PrimaryButton
             title={loading ? 'Loading ...' : 'Update'}
-            onPress={handleSubmit(_updateProfile)}
+            onPress={methods.handleSubmit(_updateProfile)}
             disabled={loading}
             disabledStyle={{ backgroundColor: theme.colors.background }}
           />
         </View>
         <SignOutDialog isOpen={isOpen} onClose={onClose} />
-      </>
+      </FormProvider>
     </MainLayout>
   );
 };

@@ -32,7 +32,9 @@ export const ProfileProvider = ({
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`full_name, website, avatar_url, profile_is_valid`)
+        .select(
+          `avatar_url, birthday, first_name, last_name, profile_is_valid, website`
+        )
         .eq('id', session?.user.id)
         .single();
       if (error && status !== 406) {
@@ -52,12 +54,13 @@ export const ProfileProvider = ({
   const updateProfile = async (profileData: Profile) => {
     try {
       if (!session?.user) throw new Error('No user on the session!');
-      console.log('CURRENT', profile);
 
       const updates: Profile = {
         id: session?.user.id,
         avatar_url: profileData.avatar_url,
-        full_name: profileData.full_name,
+        birthday: profileData.birthday,
+        first_name: profileData.first_name,
+        last_name: profileData.last_name,
         updated_at: new Date(),
         profile_is_valid: true,
         website: profileData.website,

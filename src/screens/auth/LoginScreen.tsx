@@ -1,8 +1,8 @@
-import { Image, Text, useTheme } from '@rneui/themed';
+import { Image, Input, Text, useTheme } from '@rneui/themed';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { PrimaryButton } from '../../components/buttons';
-import { AuthInput } from '../../components/inputs';
+// import { Input } from '../../components/inputs';
 import { MainLayout } from '../../layouts';
 import { supabase } from '../../supabase';
 
@@ -57,7 +57,7 @@ const LoginScreen = () => {
               }}
             />
           </View>
-          <AuthInput
+          <Input
             keyboardType='email-address'
             leftIcon={{
               type: 'ionicon',
@@ -75,7 +75,7 @@ const LoginScreen = () => {
               marginRight: 8,
             }}
           />
-          <AuthInput
+          <Input
             containerStyle={{ marginTop: -24 }}
             leftIcon={{
               type: 'ionicon',

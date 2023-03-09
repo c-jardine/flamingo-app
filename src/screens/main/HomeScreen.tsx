@@ -8,7 +8,7 @@ const HomeScreen = () => {
   const { profile } = React.useContext(ProfileContext);
   return (
     <SafeAreaView>
-      <Text>Welcome home, {profile?.full_name}!</Text>
+      <Text>Welcome home, {profile?.first_name}!</Text>
       <Button title='Sign out' onPress={() => supabase.auth.signOut()} />
     </SafeAreaView>
   );

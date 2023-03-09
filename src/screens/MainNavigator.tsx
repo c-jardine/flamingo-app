@@ -12,7 +12,7 @@ const MainNavigator = () => {
   const { session } = useSession();
   const { profile } = React.useContext(ProfileContext);
 
-  if (!session || !profile) return <SplashScreen />;
+  // if (!session || !profile) return <SplashScreen />;
   return (
     <NavigationContainer>
       <Stack.Navigator>

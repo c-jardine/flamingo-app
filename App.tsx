@@ -27,7 +27,7 @@ export default function App() {
       <ProfileProvider>
         <MainNavigator />
       </ProfileProvider>
-      <StatusBar style='auto' backgroundColor='white' />
+      <StatusBar style='auto' />
     </ThemeProvider>
   );
 }
