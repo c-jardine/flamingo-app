@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { SplashScreen } from '../components/utils';
 import { ProfileContext } from '../contexts';
 import { useSession } from '../hooks';
 import { HomeScreen, LoginScreen, ProfileCreationScreen } from './';
@@ -10,6 +11,8 @@ const Stack = createNativeStackNavigator();
 const MainNavigator = () => {
   const { session } = useSession();
   const { profile } = React.useContext(ProfileContext);
+
+  if (!session || !profile) return <SplashScreen />;
   return (
     <NavigationContainer>
       <Stack.Navigator>
