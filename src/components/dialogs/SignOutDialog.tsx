@@ -10,7 +10,7 @@ const SignOutDialog = (props: DisclosureProps) => {
     <Dialog
       isVisible={isOpen}
       onBackdropPress={onClose}
-      overlayStyle={{ borderRadius: 16 }}
+      overlayStyle={{ borderRadius: 16, width: 350 }}
     >
       <Dialog.Title title='Confirm' />
       <Text>Are you sure you want to sign out?</Text>
@@ -19,14 +19,15 @@ const SignOutDialog = (props: DisclosureProps) => {
           paddingHorizontal: 16,
           marginTop: 32,
           flexDirection: 'row',
-          gap: 16,
+          gap: 8,
         }}
       >
-        <PrimaryButton variant='ghost' title='Cancel' onPress={onClose} />
         <PrimaryButton
+          variant='ghost'
           title='Sign out'
           onPress={() => supabase.auth.signOut()}
         />
+        <PrimaryButton title='Cancel' onPress={onClose} />
       </View>
     </Dialog>
   );

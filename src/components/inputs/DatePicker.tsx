@@ -1,15 +1,14 @@
-import { Text } from '@rneui/themed';
+import { Text, useTheme } from '@rneui/themed';
 import { add, format, sub } from 'date-fns';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDisclosure } from '../../hooks';
 import { HighlightIcon } from '../icons';
 
 const DatePicker = (props: ControllerRenderProps<FieldValues, string>) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  console.log(props)
+  const {theme} = useTheme();
 
   const handleConfirm = (date: Date, onChange: (event: Date) => void) => {
     onChange(
@@ -19,6 +18,11 @@ const DatePicker = (props: ControllerRenderProps<FieldValues, string>) => {
     );
     onClose();
   };
+
+  if (!props.value) {
+    return <ActivityIndicator color={theme.colors.primary} />
+  }
+
   return (
     <>
       <TouchableOpacity

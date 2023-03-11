@@ -10,7 +10,7 @@ import {
 import { View } from 'react-native';
 import { useSession } from '../../hooks';
 import { Poppins } from '../../utils';
-import { DatePicker, KInput } from '../inputs';
+import { DatePicker, KInput, ModalSelect } from '../inputs';
 import { Profile } from '../types';
 
 type ProfileFormProps = {
@@ -131,7 +131,7 @@ const ProfileForm = () => {
 
       <Divider style={{ marginVertical: 16 }} />
 
-      {/* <View
+      <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -147,48 +147,11 @@ const ProfileForm = () => {
           control={control}
           // rules={{
           // }}
-          render={({ field: { onChange, onBlur, value } }) => {
-            return (
-              <>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 8,
-                    backgroundColor: 'white',
-                    padding: 8,
-                    borderRadius: 8,
-                    shadowColor: 'black',
-                    shadowOffset: { height: 4, width: 0 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                  }}
-                  onPress={showDatePicker}
-                >
-                  <HighlightIcon
-                    backgroundColor='#e0f2fe'
-                    icon={{
-                      type: 'ionicon',
-                      name: 'calendar-outline',
-                      color: '#38bdf8',
-                    }}
-                  />
-                  <Text style={{ color: 'rgba(0,0,0,0.5)' }}>
-                    {format(add(new Date(value), { days: 1 }), 'MMM. dd, yyyy')}
-                  </Text>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode='date'
-                  date={add(new Date(value), { days: 1 })}
-                  onConfirm={(date) => handleConfirm(date, onChange)}
-                  onCancel={hideDatePicker}
-                />
-              </>
-            );
+          render={({ field }) => {
+            return <ModalSelect {...field} />;
           }}
         />
-      </View> */}
+      </View>
 
       <Divider style={{ marginVertical: 16 }} />
 
