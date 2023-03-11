@@ -1,15 +1,14 @@
-import { Text } from '@rneui/themed';
+import { Text, useTheme } from '@rneui/themed';
 import { add, format, sub } from 'date-fns';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDisclosure } from '../../hooks';
 import { HighlightIcon } from '../icons';
 
 const DatePicker = (props: ControllerRenderProps<FieldValues, string>) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const date = props.value ? new Date(props.value) : new Date();
+  const { theme } = useTheme();
 
   const handleConfirm = (date: Date, onChange: (event: Date) => void) => {
     onChange(
@@ -19,6 +18,10 @@ const DatePicker = (props: ControllerRenderProps<FieldValues, string>) => {
     );
     onClose();
   };
+
+  // if (!props.value) {
+  //   return <ActivityIndicator color={theme.colors.primary} />
+  // }
 
   return (
     <>
@@ -46,15 +49,17 @@ const DatePicker = (props: ControllerRenderProps<FieldValues, string>) => {
           }}
         />
         <Text style={{ color: 'rgba(0,0,0,0.5)' }}>
-          {format(add(new Date(date), { days: 1 }), 'MMM. dd, yyyy')}
+          {format(add(new Date(props.value), { days: 1 }), 'MMM. dd, yyyy')}
         </Text>
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isOpen}
         mode='date'
-        date={add(date, { days: 1 })}
+        date={add(new Date(props.value), { days: 1 })}
         onConfirm={(date) => handleConfirm(date, props.onChange)}
         onCancel={onClose}
+        minimumDate={sub(new Date(), { years: 100 })}
+        maximumDate={new Date()}
       />
     </>
   );

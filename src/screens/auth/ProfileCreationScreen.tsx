@@ -1,17 +1,35 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from '@rneui/themed';
+import { sub } from 'date-fns';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import * as yup from 'yup';
 import { PrimaryButton } from '../../components/buttons';
 import { SignOutDialog } from '../../components/dialogs';
 import { ProfileForm } from '../../components/forms';
 import { Profile } from '../../components/types';
 import { ProfileContext } from '../../contexts';
-import { useDisclosure, useSession } from '../../hooks';
+import { useDisclosure } from '../../hooks';
 import { MainLayout } from '../../layouts';
 
+const schema = yup
+  .object({
+    first_name: yup
+      .string()
+      .required()
+      .min(2, 'Must be at least 2 characters!')
+      .max(32, 'Must be less than 32 characters'),
+    last_name: yup.string().max(32, 'Must be less than 32 characters'),
+    birthday: yup
+      .date()
+      // .transform(val => console.log(val))
+      .min(sub(new Date(), { years: 100 }), 'Must be less than 100 years old')
+      .max(sub(new Date(), { years: 18 }), 'Must be at least 18 years old'),
+  })
+  .required();
+
 const ProfileCreationScreen = () => {
-  const { session } = useSession();
   const { theme } = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -23,6 +41,7 @@ const ProfileCreationScreen = () => {
         return profile;
       }
     }, [profile]),
+    resolver: yupResolver(schema),
   });
 
   /**
@@ -30,7 +49,11 @@ const ProfileCreationScreen = () => {
    */
   React.useEffect(() => {
     if (profile) {
-      methods.reset(profile);
+      const initProfile = {
+        ...profile,
+        birthday: profile.birthday ?? new Date(),
+      };
+      methods.reset(initProfile);
     }
   }, [profile]);
 

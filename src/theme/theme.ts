@@ -38,8 +38,10 @@ export const theme = createTheme({
         borderRadius: 8,
       },
       errorStyle: {
-        display: 'none'
-      }
+        display: 'none',
+        color: 'red',
+        fontSize: 12,
+      },
     },
     Text: {
       style: {

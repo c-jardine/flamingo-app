@@ -7,7 +7,7 @@ import {
   FieldErrors,
   useFormContext,
 } from 'react-hook-form';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { useSession } from '../../hooks';
 import { Poppins } from '../../utils';
 import { DatePicker, KInput, ModalSelect } from '../inputs';
@@ -23,9 +23,10 @@ const ProfileForm = () => {
   // const { session, control, errors } = props;
   const { session } = useSession();
   const {
+    watch,
     control,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<Profile>();
   const { theme } = useTheme();
 
   return (
@@ -52,14 +53,6 @@ const ProfileForm = () => {
       <Controller
         name='first_name'
         control={control}
-        rules={{
-          required: { value: true, message: 'Required' },
-          minLength: { value: 2, message: 'Must be at least 2 characters' },
-          maxLength: {
-            value: 32,
-            message: 'Must be less than 32 characters',
-          },
-        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <KInput
             autoComplete='name-given'
@@ -81,13 +74,6 @@ const ProfileForm = () => {
       <Controller
         name='last_name'
         control={control}
-        rules={{
-          minLength: { value: 2, message: 'Must be at least 2 characters' },
-          maxLength: {
-            value: 32,
-            message: 'Must be less than 32 characters',
-          },
-        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <KInput
             autoComplete='name-family'
@@ -106,27 +92,43 @@ const ProfileForm = () => {
 
       <Divider style={{ marginVertical: 16 }} />
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingLeft: 8,
-        }}
-      >
-        <Text style={{ fontFamily: Poppins.MEDIUM, color: 'black' }}>
-          Birthday
-        </Text>
-        <Controller
-          name='birthday'
-          control={control}
-          rules={{
-            required: { value: true, message: 'Required' },
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingLeft: 8,
           }}
-          render={({ field }) => {
-            return <DatePicker {...field} />;
-          }}
-        />
+        >
+          <Text style={{ fontFamily: Poppins.MEDIUM, color: 'black' }}>
+            Birthday
+          </Text>
+          {watch('birthday') ? (
+            <Controller
+              name='birthday'
+              control={control}
+              rules={{
+                required: { value: true, message: 'Required' },
+              }}
+              render={({ field }) => <DatePicker {...field} />}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
+        </View>
+        {errors.birthday && (
+          <Text
+            style={{
+              marginTop: 12,
+              color: 'red',
+              fontSize: 12,
+              paddingHorizontal: 10,
+            }}
+          >
+            {errors.birthday?.message}
+          </Text>
+        )}
       </View>
 
       <Divider style={{ marginVertical: 16 }} />
