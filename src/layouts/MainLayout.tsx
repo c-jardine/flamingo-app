@@ -1,12 +1,14 @@
 import { useTheme } from '@rneui/themed';
 import React from 'react';
 import {
+  Dimensions,
+  Keyboard,
   KeyboardAvoidingView,
+  Platform,
   TouchableWithoutFeedback,
   View,
-  Keyboard,
-  Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MainLayout = (props: { children: React.ReactNode }) => {
   const { theme } = useTheme();
@@ -14,11 +16,18 @@ const MainLayout = (props: { children: React.ReactNode }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#ffe1ea' }}
+      style={{ backgroundColor: '#ffe1ea' }}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        {props.children}
-      </TouchableWithoutFeedback>
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+        <View
+          style={{
+            height: Dimensions.get('screen').height,
+            overflow: 'hidden',
+          }}
+        >
+          {props.children}
+        </View>
+      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   );
 };

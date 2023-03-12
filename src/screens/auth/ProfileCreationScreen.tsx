@@ -3,7 +3,7 @@ import { useTheme } from '@rneui/themed';
 import { sub } from 'date-fns';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import * as yup from 'yup';
 import { PrimaryButton } from '../../components/buttons';
 import { SignOutDialog } from '../../components/dialogs';
@@ -72,31 +72,42 @@ const ProfileCreationScreen = () => {
       <FormProvider {...methods}>
         <View
           style={{
-            paddingTop: 96,
+            flex: 1,
+            justifyContent: 'space-between',
             paddingBottom: 32,
-            paddingHorizontal: 16,
-            backgroundColor: 'white',
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
           }}
         >
-          <ProfileForm />
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginTop: 32,
-            flexDirection: 'row',
-            gap: 16,
-          }}
-        >
-          <PrimaryButton variant='ghost' title='Sign Out' onPress={onOpen} />
-          <PrimaryButton
-            title={loading ? 'Loading ...' : 'Update'}
-            onPress={methods.handleSubmit(_updateProfile)}
-            disabled={loading}
-            disabledStyle={{ backgroundColor: theme.colors.background }}
-          />
+          <View
+            style={{
+              flex: 1,
+              paddingTop: 64,
+              paddingHorizontal: 16,
+              paddingBottom: 32,
+              backgroundColor: 'white',
+              borderBottomLeftRadius: 32,
+              borderBottomRightRadius: 32,
+            }}
+          >
+            <ScrollView>
+              <ProfileForm />
+            </ScrollView>
+          </View>
+          <View
+            style={{
+              paddingHorizontal: 16,
+              marginTop: 32,
+              flexDirection: 'row',
+              gap: 16,
+            }}
+          >
+            <PrimaryButton variant='ghost' title='Sign Out' onPress={onOpen} />
+            <PrimaryButton
+              title={loading ? 'Loading ...' : 'Update'}
+              onPress={methods.handleSubmit(_updateProfile)}
+              disabled={loading}
+              disabledStyle={{ backgroundColor: theme.colors.background }}
+            />
+          </View>
         </View>
         <SignOutDialog isOpen={isOpen} onClose={onClose} />
       </FormProvider>
