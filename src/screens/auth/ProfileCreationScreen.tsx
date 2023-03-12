@@ -3,7 +3,7 @@ import { useTheme } from '@rneui/themed';
 import { sub } from 'date-fns';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import * as yup from 'yup';
 import { PrimaryButton } from '../../components/buttons';
 import { SignOutDialog } from '../../components/dialogs';
@@ -90,9 +90,14 @@ const ProfileCreationScreen = () => {
               borderBottomRightRadius: 32,
             }}
           >
-            <ScrollView>
-              <ProfileForm />
-            </ScrollView>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              style={Platform.OS === 'ios' && { flex: 1 }}
+            >
+              <ScrollView>
+                <ProfileForm />
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
           <View
             style={{
