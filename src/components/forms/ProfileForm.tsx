@@ -158,6 +158,66 @@ const ProfileForm = () => {
       <Divider style={{ marginVertical: 16 }} />
 
       <Controller
+        name='bio'
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <KInput
+            label='Bio'
+            placeholder='Tell people about yourself'
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            errorMessage={errors.bio?.message as string}
+            errorStyle={{
+              display: errors.bio ? 'flex' : 'none',
+            }}
+          />
+        )}
+      />
+
+      <Divider style={{ marginVertical: 16 }} />
+
+      <Controller
+        name='hobbies'
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <KInput
+            label='Hobbies'
+            placeholder='What do you do for fun?'
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            errorMessage={errors.hobbies?.message as string}
+            errorStyle={{
+              display: errors.hobbies ? 'flex' : 'none',
+            }}
+          />
+        )}
+      />
+
+      <Divider style={{ marginVertical: 16 }} />
+
+      <Controller
+        name='interests'
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <KInput
+            label='Interests'
+            placeholder='What makes you, you?'
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            errorMessage={errors.interests?.message as string}
+            errorStyle={{
+              display: errors.interests ? 'flex' : 'none',
+            }}
+          />
+        )}
+      />
+
+      <Divider style={{ marginVertical: 16 }} />
+
+      <Controller
         name='website'
         control={control}
         rules={{

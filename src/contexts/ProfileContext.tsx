@@ -33,7 +33,7 @@ export const ProfileProvider = ({
       let { data, error, status } = await supabase
         .from('profiles')
         .select(
-          `avatar_url, birthday, first_name, gender, last_name, profile_is_valid, website`
+          `avatar_url, bio, birthday, first_name, gender, hobbies, interests, last_name, profile_is_valid, website`
         )
         .eq('id', session?.user.id)
         .single();
@@ -56,15 +56,10 @@ export const ProfileProvider = ({
       if (!session?.user) throw new Error('No user on the session!');
 
       const updates: Profile = {
+        ...profileData,
         id: session?.user.id,
-        avatar_url: profileData.avatar_url,
-        birthday: profileData.birthday,
-        first_name: profileData.first_name,
-        gender: profileData.gender,
-        last_name: profileData.last_name,
         updated_at: new Date(),
         profile_is_valid: true,
-        website: profileData.website,
       };
 
       let { data, error } = await supabase

@@ -23,9 +23,11 @@ const schema = yup
     last_name: yup.string().max(32, 'Must be less than 32 characters'),
     birthday: yup
       .date()
-      // .transform(val => console.log(val))
       .min(sub(new Date(), { years: 100 }), 'Must be less than 100 years old')
       .max(sub(new Date(), { years: 18 }), 'Must be at least 18 years old'),
+    bio: yup.string().max(256, 'Too many characters'),
+    hobbies: yup.string().max(256, 'Too many characters'),
+    interests: yup.string().max(256, 'Too many characters'),
   })
   .required();
 
