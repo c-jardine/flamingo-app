@@ -1,12 +1,15 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Input, Text, useTheme } from '@rneui/themed';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
-import { PrimaryButton } from '../../components/buttons';
-// import { Input } from '../../components/inputs';
-import { MainLayout } from '../../layouts';
-import { supabase } from '../../supabase';
+import { PrimaryButton } from '../../../components/buttons';
+import { MainLayout } from '../../../layouts';
+import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { supabase } from '../../../supabase';
 
-const LoginScreen = () => {
+type LoginProps = NativeStackScreenProps<MainStackParamList, 'Login'>;
+
+const Login = (props: LoginProps) => {
   const { theme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -132,4 +135,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default Login;

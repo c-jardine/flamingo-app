@@ -2,37 +2,44 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useSession } from '../hooks';
-import { EditProfileScreen, LoginScreen, ProfileScreen } from './';
+import { Login } from '../screens/auth';
+import { EditProfile, Profile } from '../screens/main';
 
-const Stack = createNativeStackNavigator();
+export type MainStackParamList = {
+  Profile: undefined;
+  EditProfile: undefined;
+  Login: undefined;
+};
+
+const MainStack = createNativeStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
   const { session } = useSession();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <MainStack.Navigator>
         {session && session.user ? (
           <>
-            <Stack.Screen
-              name='Home'
-              component={ProfileScreen}
+            <MainStack.Screen
+              name='Profile'
+              component={Profile}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            <MainStack.Screen
               name='EditProfile'
-              component={EditProfileScreen}
+              component={EditProfile}
               options={{ headerShown: false }}
             />
           </>
         ) : (
-          <Stack.Screen
+          <MainStack.Screen
             name='Login'
-            component={LoginScreen}
+            component={Login}
             options={{ headerShown: false }}
           />
         )}
-      </Stack.Navigator>
+      </MainStack.Navigator>
     </NavigationContainer>
   );
 };

@@ -10,10 +10,10 @@ import React from 'react';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import { ProfileProvider } from './src/contexts';
-import { MainNavigator } from './src/screens';
+import { MainNavigator } from './src/navigators';
 import { theme } from './src/theme/theme';
 
-export default function App() {
+const App = () => {
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -32,4 +32,6 @@ export default function App() {
       <StatusBar style='auto' />
     </ThemeProvider>
   );
-}
+};
+
+export default App;

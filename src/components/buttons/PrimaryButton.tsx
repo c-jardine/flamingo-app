@@ -1,5 +1,4 @@
-import { ButtonProps } from '@rneui/base';
-import { Button, useTheme } from '@rneui/themed';
+import { Button, ButtonProps, useTheme } from '@rneui/themed';
 
 const PrimaryButton = (
   props: ButtonProps & { variant?: 'solid' | 'outline' | 'ghost' }
@@ -14,11 +13,10 @@ const PrimaryButton = (
       }}
       buttonStyle={{
         backgroundColor:
-          btnVariant === 'solid'
-            ? theme.colors.primary
-            : 'transparent',
+          btnVariant === 'solid' ? theme.colors.primary : 'transparent',
         borderWidth: 2,
-        borderColor: btnVariant !== 'ghost' ? theme.colors.primary : 'transparent',
+        borderColor:
+          btnVariant !== 'ghost' ? theme.colors.primary : 'transparent',
       }}
       titleStyle={{
         color:

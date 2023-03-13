@@ -1,4 +1,4 @@
-export type Profile = {
+export type ProfileProps = {
   id?: string;
   avatar_url: string;
   bio: string;

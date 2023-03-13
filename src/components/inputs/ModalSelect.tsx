@@ -1,12 +1,15 @@
-import { Dialog, Text } from '@rneui/themed';
+import { Dialog, Text, TextProps } from '@rneui/themed';
+import React from 'react';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { TouchableOpacity, View } from 'react-native';
 import { useDisclosure } from '../../hooks';
 import { PrimaryButton } from '../buttons';
 import { HighlightIcon } from '../icons';
-import React from 'react';
 
-const ModalSelect = (props: ControllerRenderProps<FieldValues, string>) => {
+const ModalSelect = React.forwardRef<
+  TextProps,
+  ControllerRenderProps<FieldValues, string>
+>((props, ref) => {
   const { value, onChange } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -91,5 +94,5 @@ const ModalSelect = (props: ControllerRenderProps<FieldValues, string>) => {
       </Dialog>
     </>
   );
-};
+});
 export default ModalSelect;

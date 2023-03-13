@@ -2,11 +2,11 @@ import { Divider, Text } from '@rneui/themed';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
-import { useSession } from '../../hooks';
-import { Poppins } from '../../utils';
-import { DatePicker, KInput, ModalSelect } from '../inputs';
-import { Profile } from '../types';
-import { AvatarUploadButton } from '../buttons';
+import { DatePicker, KInput, ModalSelect } from '../../../components/inputs';
+import { useSession } from '../../../hooks';
+import { ProfileProps } from '../../../types';
+import { Poppins } from '../../../utils';
+import AvatarUpload from './AvatarUpload';
 
 const ProfileForm = () => {
   const { session } = useSession();
@@ -14,7 +14,7 @@ const ProfileForm = () => {
     watch,
     control,
     formState: { errors },
-  } = useFormContext<Profile>();
+  } = useFormContext<ProfileProps>();
 
   return (
     <>
@@ -28,7 +28,7 @@ const ProfileForm = () => {
       >
         Edit profile
       </Text>
-      <AvatarUploadButton />
+      <AvatarUpload />
 
       <Divider style={{ marginVertical: 16 }} />
 
@@ -163,8 +163,6 @@ const ProfileForm = () => {
         <Controller
           name='gender'
           control={control}
-          // rules={{
-          // }}
           render={({ field }) => {
             return <ModalSelect {...field} />;
           }}

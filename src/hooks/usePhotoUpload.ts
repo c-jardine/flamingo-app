@@ -1,14 +1,12 @@
 import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
 import { Profile } from '../components/types';
-import { ProfileContext } from '../contexts';
 import { supabase } from '../supabase';
 
 export const usePhotoUpload = () => {
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<unknown>(null);
   const [photoUri, setPhotoUri] = React.useState<string>('');
-  const { profile, updateProfile } = React.useContext(ProfileContext);
 
   const clear = () => {
     setPhotoUri('');
@@ -33,7 +31,10 @@ export const usePhotoUpload = () => {
     }
   };
 
-  const uploadPhoto = async () => {
+  const uploadPhoto = async (
+    profile: Profile,
+    updateProfile: (data: Profile) => void
+  ) => {
     try {
       setIsUploading(true);
       const fileExt = photoUri?.split('.').pop();

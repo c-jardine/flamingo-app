@@ -6,11 +6,13 @@ export const theme = createTheme({
     background: 'white',
     background2: '#ffe1ea',
     primary: '#f82e4b',
+    secondary: '#ffe1ea',
   },
   darkColors: {
     background: 'black',
     background2: '#ffe1ea',
     primary: '#f82e4b',
+    secondary: '#ffe1ea',
   },
   mode: 'light',
   components: {
@@ -38,6 +40,7 @@ export const theme = createTheme({
         borderRadius: 8,
       },
       errorStyle: {
+        fontFamily: Poppins.REGULAR,
         display: 'none',
         color: 'red',
         fontSize: 12,

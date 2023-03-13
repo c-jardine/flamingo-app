@@ -1,31 +1,42 @@
-import { Dialog, Image, useTheme } from '@rneui/themed';
+import { Dialog, Image } from '@rneui/themed';
 import React from 'react';
-import { ActivityIndicator, Alert, View } from 'react-native';
-import { ProfileContext } from '../../contexts';
-import { useDownloadPhoto, usePhotoUpload } from '../../hooks';
-import { Avatar } from '../core';
-import IconButton from './IconButton';
-import PrimaryButton from './PrimaryButton';
+import { Alert, View } from 'react-native';
+import { IconButton, PrimaryButton } from '../../../components/buttons';
+import { ProfileContext } from '../../../contexts';
+import { useDownloadPhoto, usePhotoUpload } from '../../../hooks';
+import { ProfileProps } from '../../../types';
+import AvatarUploadLoader from './AvatarUploadLoader';
 
-const AvatarUploadButton = () => {
-  const { profile } = React.useContext(ProfileContext);
-  const { photoUri: avatar } = useDownloadPhoto(profile?.avatar_url!);
-
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+const AvatarUpload = () => {
+  const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
 
   return (
-    <View style={{ paddingBottom: isEditing ? 0 : 32 }}>
-      <EditableAvatar />
-    </View>
+    <>
+      {isDownloading || !photoUri ? (
+        <AvatarUploadLoader />
+      ) : (
+        <AvatarInput
+          photoUri={photoUri}
+          profile={profile!}
+          updateProfile={updateProfile}
+        />
+      )}
+    </>
   );
 };
 
-const EditableAvatar = () => {
+const AvatarInput = (props: {
+  profile: ProfileProps;
+  photoUri: string;
+  updateProfile: (data: ProfileProps) => void;
+}) => {
+  const { profile, photoUri: avatar, updateProfile } = props;
   const { state, actions, photoUri } = usePhotoUpload();
 
   const _handleUpload = async () => {
     try {
-      await actions.uploadPhoto();
+      await actions.uploadPhoto(profile, updateProfile);
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -45,16 +56,22 @@ const EditableAvatar = () => {
           overflow: 'hidden',
         }}
       >
-        <Avatar />
+        <Image
+          source={{ uri: avatar }}
+          accessibilityLabel='Avatar'
+          style={{ width: '100%', height: '100%' }}
+        />
       </View>
-      <IconButton
-        icon={{
-          type: 'ionicon',
-          name: 'camera',
-          size: 24,
-        }}
-        onPress={actions.takePhoto}
-      />
+      <View style={{ marginTop: -24 }}>
+        <IconButton
+          icon={{
+            type: 'ionicon',
+            name: 'camera',
+            size: 24,
+          }}
+          onPress={actions.takePhoto}
+        />
+      </View>
       <Dialog
         isVisible={!!photoUri}
         overlayStyle={{ borderRadius: 16, width: 350 }}
@@ -94,21 +111,4 @@ const EditableAvatar = () => {
   );
 };
 
-const LoadingAvatar = () => {
-  const { theme } = useTheme();
-  return (
-    <View
-      style={{
-        alignSelf: 'center',
-        aspectRatio: 1,
-        width: '50%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <ActivityIndicator size='large' color={theme.colors.primary} />
-    </View>
-  );
-};
-
-export default AvatarUploadButton;
+export default AvatarUpload;

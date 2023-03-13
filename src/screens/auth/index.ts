@@ -1,2 +1,1 @@
-export { default as LoginScreen } from './LoginScreen';
-export { default as EditProfileScreen } from './EditProfileScreen';
+export * from './LoginScreen';

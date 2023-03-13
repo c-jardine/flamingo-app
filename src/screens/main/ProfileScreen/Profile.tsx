@@ -1,7 +1,9 @@
-import { Icon, Image, Text } from '@rneui/themed';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon, Image, Text, useTheme } from '@rneui/themed';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -10,14 +12,20 @@ import {
   View,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
-import { IconButton } from '../../components/buttons';
-import { TextSection } from '../../components/core';
-import { ProfileContext } from '../../contexts';
-import { useDisclosure, useDownloadPhoto } from '../../hooks';
-import { Poppins } from '../../utils';
+import { IconButton } from '../../../components/buttons';
+import { TextSection } from '../../../components/core';
+import { SplashScreen } from '../../../components/utils';
+import { ProfileContext } from '../../../contexts';
+import { useDisclosure, useDownloadPhoto } from '../../../hooks';
+import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { Poppins } from '../../../utils';
 
-const ProfileScreen = ({ navigation }) => {
-  const { profile, updateProfile } = React.useContext(ProfileContext);
+type ProfileProps = NativeStackScreenProps<MainStackParamList, 'Profile'>;
+
+const Profile = (props: ProfileProps) => {
+  const { navigation } = props;
+  const { theme } = useTheme();
+  const { profile } = React.useContext(ProfileContext);
   const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -32,22 +40,38 @@ const ProfileScreen = ({ navigation }) => {
       setImageOpacity(1 - relativePosition + 0.15);
     }
   };
+
+  if (!profile) {
+    return <SplashScreen />;
+  }
+
   return (
     <View style={{ backgroundColor: 'white' }}>
       <TouchableOpacity onPress={onOpen}>
-        <Image
-          source={{
-            uri: !isDownloading
-              ? photoUri
-              : 'https://i.EditProfile.com/Sfn2JIY.png',
-          }}
-          style={{
-            aspectRatio: 1,
-            width: '100%',
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-          }}
-        />
+        {isDownloading ? (
+          <View
+            style={{
+              aspectRatio: 1,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ActivityIndicator size='large' color={theme.colors.primary} />
+          </View>
+        ) : (
+          <Image
+            source={{
+              uri: photoUri,
+            }}
+            style={{
+              aspectRatio: 1,
+              width: '100%',
+              borderBottomLeftRadius: 32,
+              borderBottomRightRadius: 32,
+            }}
+          />
+        )}
       </TouchableOpacity>
       <ImageView
         images={gallery}
@@ -81,7 +105,9 @@ const ProfileScreen = ({ navigation }) => {
                     borderRadius: 8,
                   }}
                 >
-                  <Text style={{ color:'rgba(255,255,255,0.35)', fontSize: 16 }}>
+                  <Text
+                    style={{ color: 'rgba(255,255,255,0.35)', fontSize: 16 }}
+                  >
                     {imageIndex + 1} / {gallery.length}
                   </Text>
                 </View>
@@ -154,4 +180,4 @@ const ProfileScreen = ({ navigation }) => {
     </View>
   );
 };
-export default ProfileScreen;
+export default Profile;
