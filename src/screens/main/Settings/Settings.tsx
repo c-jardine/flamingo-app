@@ -1,0 +1,121 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Divider, Image, Text, useTheme } from '@rneui/themed';
+import React from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { MenuButton, PrimaryButton } from '../../../components/buttons';
+import { ProfileContext } from '../../../contexts';
+import { useDownloadPhoto } from '../../../hooks';
+import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { supabase } from '../../../supabase';
+import { Poppins } from '../../../utils';
+
+type SettingsProps = NativeStackScreenProps<MainStackParamList, 'Tabs'>;
+
+const Settings = (props: SettingsProps) => {
+  const { navigation } = props;
+  const { theme } = useTheme();
+  const { profile } = React.useContext(ProfileContext);
+  const { photoUri } = useDownloadPhoto(profile?.avatar_url!);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          paddingTop: 64,
+          paddingBottom: 32,
+          flexDirection: 'row',
+          width: '100%',
+          paddingHorizontal: 16,
+          gap: 16,
+        }}
+      >
+        <View style={{ aspectRatio: 1, width: 96 }}>
+          {photoUri ? (
+            <Image
+              source={{ uri: photoUri }}
+              style={{ width: '100%', height: '100%', borderRadius: 8 }}
+            />
+          ) : (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ActivityIndicator size='large' color={theme.colors.primary} />
+            </View>
+          )}
+        </View>
+        <View style={{ flex: 1, gap: 8, justifyContent: 'center' }}>
+          <Text style={{ fontSize: 20, fontFamily: Poppins.SEMIBOLD }}>
+            {profile.first_name} {profile.last_name}
+          </Text>
+          <View style={{ flexDirection: 'row', gap: 16 }}>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <Text style={{ fontFamily: Poppins.REGULAR }}>View profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EditProfile')}
+            >
+              <Text style={{ fontFamily: Poppins.REGULAR }}>Edit profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <Divider />
+      <ScrollView style={{ flex: 1, padding: 16, paddingTop: 0 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: 24,
+          }}
+        >
+          <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
+            Profile management
+          </Text>
+        </View>
+        <MenuButton>Manage friends</MenuButton>
+        <Divider />
+        <MenuButton>Your photos</MenuButton>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: 24,
+          }}
+        >
+          <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
+            Settings
+          </Text>
+        </View>
+        <MenuButton>Privacy & security</MenuButton>
+        <Divider />
+        <MenuButton>Preferences</MenuButton>
+        <Divider />
+        <MenuButton>Notifications</MenuButton>
+        <Divider />
+        <MenuButton>Support</MenuButton>
+        <Divider />
+        <MenuButton>About</MenuButton>
+        <Divider />
+        <PrimaryButton
+          title='Sign out'
+          onPress={() => supabase.auth.signOut()}
+          style={{ marginTop: 24 }}
+        />
+      </ScrollView>
+    </View>
+  );
+};
+export default Settings;
