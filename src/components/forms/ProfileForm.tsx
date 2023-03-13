@@ -18,10 +18,15 @@ const ProfileForm = () => {
 
   return (
     <>
-      <Text style={{ fontSize: 32, fontWeight: '700' }}>Edit profile</Text>
-      <Text style={{ marginBottom: 32 }}>
-        Finish setting up your profile to continue. You can always update it
-        later.
+      <Text
+        style={{
+          marginBottom: 32,
+          fontSize: 32,
+          fontWeight: '700',
+          fontFamily: Poppins.SEMIBOLD,
+        }}
+      >
+        Edit profile
       </Text>
       <AvatarUploadButton />
 
@@ -76,6 +81,26 @@ const ProfileForm = () => {
             errorMessage={errors.last_name?.message as string}
             errorStyle={{
               display: errors.last_name ? 'flex' : 'none',
+            }}
+          />
+        )}
+      />
+
+      <Divider style={{ marginVertical: 16 }} />
+
+      <Controller
+        name='tagline'
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <KInput
+            label='Tagline'
+            placeholder='Looking for fun'
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            errorMessage={errors.tagline?.message as string}
+            errorStyle={{
+              display: errors.tagline ? 'flex' : 'none',
             }}
           />
         )}
@@ -155,6 +180,7 @@ const ProfileForm = () => {
           <KInput
             label='Bio'
             placeholder='Tell people about yourself'
+            multiline
             value={value}
             onBlur={onBlur}
             onChangeText={onChange}

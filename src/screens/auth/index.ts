@@ -1,2 +1,2 @@
 export { default as LoginScreen } from './LoginScreen';
-export { default as ProfileCreationScreen } from './ProfileCreationScreen';
+export { default as EditProfileScreen } from './EditProfileScreen';

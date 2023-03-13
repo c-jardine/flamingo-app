@@ -29,7 +29,7 @@ export const theme = createTheme({
         fontFamily: Poppins.MEDIUM,
       },
       inputStyle: {
-        fontSize: 14,
+        fontSize: 15,
         // padding: 12,
         fontFamily: Poppins.REGULAR,
       },
@@ -44,9 +44,7 @@ export const theme = createTheme({
       },
     },
     Text: {
-      style: {
-        fontSize: 16,
-      },
+      style: { fontSize: 16 },
     },
   },
 });

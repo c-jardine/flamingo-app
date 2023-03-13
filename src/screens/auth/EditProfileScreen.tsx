@@ -1,12 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@rneui/themed';
 import { sub } from 'date-fns';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
 import * as yup from 'yup';
 import { PrimaryButton } from '../../components/buttons';
-import { SignOutDialog } from '../../components/dialogs';
 import { ProfileForm } from '../../components/forms';
 import { Profile } from '../../components/types';
 import { ProfileContext } from '../../contexts';
@@ -21,6 +27,7 @@ const schema = yup
       .min(2, 'Must be at least 2 characters!')
       .max(32, 'Must be less than 32 characters'),
     last_name: yup.string().max(32, 'Must be less than 32 characters'),
+    tagline: yup.string().max(64, 'Too many characters'),
     birthday: yup
       .date()
       .min(sub(new Date(), { years: 100 }), 'Must be less than 100 years old')
@@ -31,11 +38,12 @@ const schema = yup
   })
   .required();
 
-const ProfileCreationScreen = () => {
+const EditProfileScreen = () => {
   const { theme } = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { goBack } = useNavigation();
 
   const methods = useForm<Profile>({
     defaultValues: React.useMemo(() => {
@@ -64,9 +72,17 @@ const ProfileCreationScreen = () => {
    * @param data The data to update the profile with.
    */
   const _updateProfile = (data: Profile) => {
-    setLoading(true);
-    updateProfile(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      updateProfile(data);
+      setLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error);
+      }
+    } finally {
+      goBack();
+    }
   };
 
   return (
@@ -107,7 +123,7 @@ const ProfileCreationScreen = () => {
               gap: 16,
             }}
           >
-            <PrimaryButton variant='ghost' title='Sign Out' onPress={onOpen} />
+            <PrimaryButton variant='ghost' title='Cancel' onPress={goBack} />
             <PrimaryButton
               title={loading ? 'Loading ...' : 'Update'}
               onPress={methods.handleSubmit(_updateProfile)}
@@ -116,10 +132,9 @@ const ProfileCreationScreen = () => {
             />
           </View>
         </View>
-        <SignOutDialog isOpen={isOpen} onClose={onClose} />
       </FormProvider>
     </MainLayout>
   );
 };
 
-export default ProfileCreationScreen;
+export default EditProfileScreen;

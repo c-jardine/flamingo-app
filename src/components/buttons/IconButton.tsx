@@ -11,8 +11,6 @@ const IconButton = (props: IconButtonProps) => {
   return (
     <TouchableOpacity
       style={{
-        position: 'absolute',
-        bottom: -20,
         padding: 8,
         backgroundColor: 'white',
         borderRadius: 24,

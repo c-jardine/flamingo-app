@@ -1,6 +1,7 @@
 import {
   Poppins_400Regular,
   Poppins_500Medium,
+  Poppins_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/poppins';
 import { ThemeProvider } from '@rneui/themed';
@@ -16,6 +17,7 @@ export default function App() {
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
+    Poppins_600SemiBold,
   });
 
   if (!fontsLoaded) {

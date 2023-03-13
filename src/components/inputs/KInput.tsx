@@ -1,6 +1,7 @@
 import { InputProps } from '@rneui/base';
 import { Input, useTheme, useThemeMode } from '@rneui/themed';
 import React from 'react';
+import { Poppins } from '../../utils';
 
 const KInput = (props: InputProps) => {
   const { theme } = useTheme();

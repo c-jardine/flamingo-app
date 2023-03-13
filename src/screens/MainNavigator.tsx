@@ -1,37 +1,31 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { SplashScreen } from '../components/utils';
-import { ProfileContext } from '../contexts';
 import { useSession } from '../hooks';
-import { HomeScreen, LoginScreen, ProfileCreationScreen } from './';
+import { EditProfileScreen, LoginScreen, ProfileScreen } from './';
 
 const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => {
   const { session } = useSession();
-  const { profile } = React.useContext(ProfileContext);
 
-  // if (!session || !profile) return <SplashScreen />;
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {session && session.user ? (
-          // profile?.profile_is_valid ? (
           <>
             <Stack.Screen
               name='Home'
-              component={HomeScreen}
+              component={ProfileScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name='ProfileCreation'
-              component={ProfileCreationScreen}
+              name='EditProfile'
+              component={EditProfileScreen}
               options={{ headerShown: false }}
             />
           </>
         ) : (
-          // )
           <Stack.Screen
             name='Login'
             component={LoginScreen}

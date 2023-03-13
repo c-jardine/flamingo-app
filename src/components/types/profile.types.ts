@@ -9,6 +9,7 @@ export type Profile = {
   interests: string;
   last_name: string;
   profile_is_valid: boolean;
+  tagline: string;
   updated_at?: Date;
   website: string;
 };
