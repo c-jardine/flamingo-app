@@ -33,7 +33,7 @@ export const ProfileProvider = ({
       let { data, error, status } = await supabase
         .from('profiles')
         .select(
-          `avatar_url, bio, birthday, first_name, gender, hobbies, interests, last_name, profile_is_valid, website`
+          `id, avatar_url, bio, birthday, first_name, gender, hobbies, interests, last_name, profile_is_valid, website`
         )
         .eq('id', session?.user.id)
         .single();

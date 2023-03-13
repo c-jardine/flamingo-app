@@ -1,41 +1,32 @@
-import { Divider, Text, useTheme } from '@rneui/themed';
-import { Session } from '@supabase/supabase-js';
+import { Divider, Text } from '@rneui/themed';
 import React from 'react';
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  useFormContext,
-} from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { ActivityIndicator, View } from 'react-native';
 import { useSession } from '../../hooks';
 import { Poppins } from '../../utils';
 import { DatePicker, KInput, ModalSelect } from '../inputs';
 import { Profile } from '../types';
-
-type ProfileFormProps = {
-  session: Session;
-  control: Control<Profile, any>;
-  errors: FieldErrors<Profile>;
-};
+import { AvatarUploadButton } from '../buttons';
 
 const ProfileForm = () => {
-  // const { session, control, errors } = props;
   const { session } = useSession();
   const {
     watch,
     control,
     formState: { errors },
   } = useFormContext<Profile>();
-  const { theme } = useTheme();
 
   return (
     <>
-      <Text style={{ fontSize: 32, fontWeight: '700' }}>Profile</Text>
+      <Text style={{ fontSize: 32, fontWeight: '700' }}>Edit profile</Text>
       <Text style={{ marginBottom: 32 }}>
         Finish setting up your profile to continue. You can always update it
         later.
       </Text>
+      <AvatarUploadButton />
+
+      <Divider style={{ marginVertical: 16 }} />
+
       <KInput
         label='Email'
         value={session?.user.email}

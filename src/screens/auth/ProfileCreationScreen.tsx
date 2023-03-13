@@ -84,7 +84,7 @@ const ProfileCreationScreen = () => {
               flex: 1,
               paddingTop: 64,
               paddingHorizontal: 16,
-              paddingBottom: 32,
+              overflow: 'hidden',
               backgroundColor: 'white',
               borderBottomLeftRadius: 32,
               borderBottomRightRadius: 32,

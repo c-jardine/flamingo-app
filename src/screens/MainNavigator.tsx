@@ -17,20 +17,21 @@ const MainNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {session && session.user ? (
-          profile?.profile_is_valid ? (
+          // profile?.profile_is_valid ? (
+          <>
             <Stack.Screen
               name='Home'
               component={HomeScreen}
               options={{ headerShown: false }}
             />
-          ) : (
             <Stack.Screen
               name='ProfileCreation'
               component={ProfileCreationScreen}
               options={{ headerShown: false }}
             />
-          )
+          </>
         ) : (
+          // )
           <Stack.Screen
             name='Login'
             component={LoginScreen}
