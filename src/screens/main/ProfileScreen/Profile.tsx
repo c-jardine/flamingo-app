@@ -48,7 +48,7 @@ const Profile = (props: ProfileProps) => {
   return (
     <View style={{ backgroundColor: 'white' }}>
       <TouchableOpacity onPress={onOpen}>
-        {isDownloading ? (
+        {isDownloading || !photoUri ? (
           <View
             style={{
               aspectRatio: 1,
