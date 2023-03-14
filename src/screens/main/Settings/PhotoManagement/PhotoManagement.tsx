@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { PhotoThumbnails } from '../../../../components/core';
 import { ProfileContext } from '../../../../contexts';
 
@@ -7,12 +7,7 @@ const PhotoManagement = () => {
   const { profile } = React.useContext(ProfileContext);
 
   return (
-    <View
-      style={{
-        height: Dimensions.get('screen').height,
-        overflow: 'hidden',
-      }}
-    >
+    <View style={{ flex: 1 }}>
       <PhotoThumbnails folderName={profile?.id!} />
     </View>
   );

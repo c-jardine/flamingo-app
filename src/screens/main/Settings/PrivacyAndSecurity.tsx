@@ -1,11 +1,11 @@
-import { Text } from '@rneui/themed';
 import { View } from 'react-native';
+import { Header } from '../../../components/core';
 
 const PrivacyAndSecurity = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Privacy & Security</Text>
+    <View>
+      <Header title='Privacy & Security' />
     </View>
   );
-}
-export default PrivacyAndSecurity
+};
+export default PrivacyAndSecurity;

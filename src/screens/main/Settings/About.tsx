@@ -1,10 +1,14 @@
-import { Text } from '@rneui/themed';
 import { View } from 'react-native';
+import { Header } from '../../../components/core';
+import Constants from 'expo-constants';
 
 const About = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>About</Text>
+    <View>
+      <Header
+        title='About'
+        subtitle={`Version: ${Constants.manifest?.version}`}
+      />
     </View>
   );
 };

@@ -1,10 +1,10 @@
-import { Text } from '@rneui/themed';
 import { View } from 'react-native';
+import { Header } from '../../../components/core';
 
 const Preferences = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Preferences</Text>
+    <View>
+      <Header title='Preferences' />
     </View>
   );
 };

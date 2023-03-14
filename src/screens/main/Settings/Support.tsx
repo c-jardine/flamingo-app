@@ -1,10 +1,10 @@
-import { Text } from '@rneui/themed';
 import { View } from 'react-native';
+import { Header } from '../../../components/core';
 
 const Support = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Support</Text>
+    <View>
+      <Header title='Support' />
     </View>
   );
 };
