@@ -2,7 +2,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, useTheme } from '@rneui/themed';
 import { Home, Settings } from '../screens/main';
 
-const Tabs = createBottomTabNavigator();
+export type TabsParamList = {
+  Home: undefined;
+  Settings: undefined;
+};
+
+const Tabs = createBottomTabNavigator<TabsParamList>();
 
 const MainTabs = () => {
   const { theme } = useTheme();
@@ -24,7 +29,7 @@ const MainTabs = () => {
         }}
       />
       <Tabs.Screen
-        name='EditProfile'
+        name='Settings'
         component={Settings}
         options={{
           tabBarIcon: ({ focused }) => (

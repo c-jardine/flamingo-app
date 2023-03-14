@@ -3,7 +3,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useSession } from '../hooks';
 import { Login } from '../screens/auth';
-import { EditProfile, Profile } from '../screens/main';
+import {
+  About,
+  EditProfile,
+  FriendManagement,
+  Notifications,
+  PhotoManagement,
+  Preferences,
+  PrivacyAndSecurity,
+  Profile,
+  Support,
+} from '../screens/main';
 import MainTabs from './MainTabs';
 
 export type MainStackParamList = {
@@ -11,6 +21,13 @@ export type MainStackParamList = {
   Profile: undefined;
   EditProfile: undefined;
   Login: undefined;
+  FriendManagement: undefined;
+  PhotoManagement: undefined;
+  PrivacyAndSecurity: undefined;
+  Preferences: undefined;
+  Notifications: undefined;
+  Support: undefined;
+  About: undefined;
 };
 
 const MainStack = createNativeStackNavigator<MainStackParamList>();
@@ -18,34 +35,32 @@ const MainStack = createNativeStackNavigator<MainStackParamList>();
 const MainNavigator = () => {
   const { session } = useSession();
 
-  console.log(session)
+  console.log(session);
 
   return (
     <NavigationContainer>
-      <MainStack.Navigator>
-        {!session && (
-          <MainStack.Screen
-            name='Login'
-            component={Login}
-            options={{ headerShown: false }}
-          />
-        )}
+      <MainStack.Navigator screenOptions={{ headerShown: false }}>
+        {!session && <MainStack.Screen name='Login' component={Login} />}
         <>
+          <MainStack.Screen name='Tabs' component={MainTabs} />
+          <MainStack.Screen name='Profile' component={Profile} />
+          <MainStack.Screen name='EditProfile' component={EditProfile} />
           <MainStack.Screen
-            name='Tabs'
-            component={MainTabs}
-            options={{ headerShown: false }}
+            name='FriendManagement'
+            component={FriendManagement}
           />
           <MainStack.Screen
-            name='Profile'
-            component={Profile}
-            options={{ headerShown: false }}
+            name='PhotoManagement'
+            component={PhotoManagement}
           />
           <MainStack.Screen
-            name='EditProfile'
-            component={EditProfile}
-            options={{ headerShown: false }}
+            name='PrivacyAndSecurity'
+            component={PrivacyAndSecurity}
           />
+          <MainStack.Screen name='Preferences' component={Preferences} />
+          <MainStack.Screen name='Notifications' component={Notifications} />
+          <MainStack.Screen name='Support' component={Support} />
+          <MainStack.Screen name='About' component={About} />
         </>
       </MainStack.Navigator>
     </NavigationContainer>

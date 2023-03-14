@@ -11,10 +11,14 @@ import { MenuButton, PrimaryButton } from '../../../components/buttons';
 import { ProfileContext } from '../../../contexts';
 import { useDownloadPhoto } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { TabsParamList } from '../../../navigators/MainTabs';
 import { supabase } from '../../../supabase';
 import { Poppins } from '../../../utils';
 
-type SettingsProps = NativeStackScreenProps<MainStackParamList, 'Tabs'>;
+type SettingsProps = NativeStackScreenProps<
+  TabsParamList & MainStackParamList,
+  'Settings'
+>;
 
 const Settings = (props: SettingsProps) => {
   const { navigation } = props;
@@ -83,9 +87,13 @@ const Settings = (props: SettingsProps) => {
             Profile management
           </Text>
         </View>
-        <MenuButton>Manage friends</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('FriendManagement')}>
+          Manage friends
+        </MenuButton>
         <Divider />
-        <MenuButton>Your photos</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('PhotoManagement')}>
+          Your photos
+        </MenuButton>
 
         <View
           style={{
@@ -99,15 +107,25 @@ const Settings = (props: SettingsProps) => {
             Settings
           </Text>
         </View>
-        <MenuButton>Privacy & security</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('PrivacyAndSecurity')}>
+          Privacy & security
+        </MenuButton>
         <Divider />
-        <MenuButton>Preferences</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('Preferences')}>
+          Preferences
+        </MenuButton>
         <Divider />
-        <MenuButton>Notifications</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('Notifications')}>
+          Notifications
+        </MenuButton>
         <Divider />
-        <MenuButton>Support</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('Support')}>
+          Support
+        </MenuButton>
         <Divider />
-        <MenuButton>About</MenuButton>
+        <MenuButton onPress={() => navigation.navigate('About')}>
+          About
+        </MenuButton>
         <Divider />
         <PrimaryButton
           title='Sign out'
