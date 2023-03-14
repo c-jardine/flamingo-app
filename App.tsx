@@ -29,7 +29,7 @@ const App = () => {
       <ProfileProvider>
         <MainNavigator />
       </ProfileProvider>
-      <StatusBar style='auto' />
+      <StatusBar style='dark' />
     </ThemeProvider>
   );
 };

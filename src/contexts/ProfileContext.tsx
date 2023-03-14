@@ -1,17 +1,17 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import { Profile } from '../components/types';
 import { useSession } from '../hooks';
 import { supabase } from '../supabase';
+import { ProfileProps } from '../types';
 
 interface ProfileContextProps {
-  profile: Profile | null;
-  updateProfile: (profileData: Profile) => void;
+  profile: ProfileProps | null;
+  updateProfile: (profileData: ProfileProps) => void;
 }
 
 export const ProfileContext = React.createContext<ProfileContextProps>({
   profile: null,
-  updateProfile: (profileData: Profile) => Promise<void>,
+  updateProfile: (profileData: ProfileProps) => Promise<void>,
 });
 
 export const ProfileProvider = ({
@@ -19,7 +19,7 @@ export const ProfileProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [profile, setProfile] = React.useState<Profile | null>(null);
+  const [profile, setProfile] = React.useState<ProfileProps | null>(null);
   const { session } = useSession();
 
   React.useEffect(() => {
@@ -51,11 +51,11 @@ export const ProfileProvider = ({
     }
   };
 
-  const updateProfile = async (profileData: Profile) => {
+  const updateProfile = async (profileData: ProfileProps) => {
     try {
       if (!session?.user) throw new Error('No user on the session!');
 
-      const updates: Profile = {
+      const updates: ProfileProps = {
         ...profileData,
         id: session?.user.id,
         updated_at: new Date(),
@@ -71,7 +71,7 @@ export const ProfileProvider = ({
         throw error;
       }
 
-      data && setProfile(data[0] as Profile);
+      data && setProfile(data[0] as ProfileProps);
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);

@@ -9,7 +9,7 @@ const PrimaryButton = (
   return (
     <Button
       containerStyle={{
-        flex: 1,
+        // flex: 1,
       }}
       buttonStyle={{
         backgroundColor:

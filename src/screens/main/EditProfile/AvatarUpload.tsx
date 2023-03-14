@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, View } from 'react-native';
 import { IconButton, PrimaryButton } from '../../../components/buttons';
 import { ProfileContext } from '../../../contexts';
-import { useDownloadPhoto, usePhotoUpload } from '../../../hooks';
+import { useDownloadPhoto, usePhotoManager } from '../../../hooks';
 import { ProfileProps } from '../../../types';
 import AvatarUploadLoader from './AvatarUploadLoader';
 
@@ -32,7 +32,7 @@ const AvatarInput = (props: {
   updateProfile: (data: ProfileProps) => void;
 }) => {
   const { profile, photoUri: avatar, updateProfile } = props;
-  const { state, actions, photoUri } = usePhotoUpload();
+  const { state, actions, photoUri } = usePhotoManager();
 
   const _handleUpload = async () => {
     try {
@@ -102,8 +102,8 @@ const AvatarInput = (props: {
             containerStyle={{ flex: 1 }}
             title='Save'
             onPress={_handleUpload}
-            disabled={!photoUri || state.isUploading}
-            loading={state.isUploading}
+            disabled={!photoUri || state.isLoading}
+            loading={state.isLoading}
           />
         </View>
       </Dialog>

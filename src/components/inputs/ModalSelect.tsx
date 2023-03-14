@@ -70,25 +70,26 @@ const ModalSelect = React.forwardRef<
         <View
           style={{
             marginTop: 8,
+            gap: 8
           }}
         >
           <PrimaryButton
             variant={props.value === 'Male' ? 'solid' : 'outline'}
             title='Male'
             onPress={() => handleSelect('Male')}
-            containerStyle={{ height: 64 }}
+            // containerStyle={{ height: 64 }}
           />
           <PrimaryButton
             variant={props.value === 'Female' ? 'solid' : 'outline'}
             title='Female'
             onPress={() => handleSelect('Female')}
-            containerStyle={{ height: 64 }}
+            // containerStyle={{ height: 64 }}
           />
           <PrimaryButton
             variant={props.value === 'Non-binary' ? 'solid' : 'outline'}
             title='Non-binary'
             onPress={() => handleSelect('Non-binary')}
-            containerStyle={{ height: 64 }}
+            // containerStyle={{ height: 64 }}
           />
         </View>
       </Dialog>

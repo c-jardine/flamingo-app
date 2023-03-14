@@ -1,10 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
-import { Profile } from '../components/types';
+import { Alert } from 'react-native';
 import { supabase } from '../supabase';
+import { ProfileProps } from '../types';
 
-export const usePhotoUpload = () => {
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
+export const usePhotoManager = () => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<unknown>(null);
   const [photoUri, setPhotoUri] = React.useState<string>('');
 
@@ -32,11 +33,11 @@ export const usePhotoUpload = () => {
   };
 
   const uploadPhoto = async (
-    profile: Profile,
-    updateProfile: (data: Profile) => void
+    profile: ProfileProps,
+    updateProfile: (data: ProfileProps) => void
   ) => {
     try {
-      setIsUploading(true);
+      setIsLoading(true);
       const fileExt = photoUri?.split('.').pop();
 
       const photoData = {
@@ -58,17 +59,35 @@ export const usePhotoUpload = () => {
         throw error;
       }
 
-      updateProfile({ ...profile, avatar_url: data?.path } as Profile);
+      updateProfile({ ...profile, avatar_url: data?.path } as ProfileProps);
     } catch (error) {
       setError(error);
     } finally {
-      setIsUploading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const deletePhotos = async (photos: string[]) => {
+    try {
+      setIsLoading(true);
+
+      const { error } = await supabase.storage.from('avatars').remove(photos);
+
+      if (error) {
+        throw new Error('Error deleting photos:', error);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
-    state: { isUploading, error },
-    actions: { takePhoto, uploadPhoto, clear },
+    state: { isLoading, error },
+    actions: { takePhoto, uploadPhoto, deletePhotos, clear },
     photoUri,
   };
 };

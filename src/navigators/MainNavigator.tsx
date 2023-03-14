@@ -35,8 +35,6 @@ const MainStack = createNativeStackNavigator<MainStackParamList>();
 const MainNavigator = () => {
   const { session } = useSession();
 
-  console.log(session);
-
   return (
     <NavigationContainer>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>

@@ -53,13 +53,13 @@ const Settings = (props: SettingsProps) => {
                 alignItems: 'center',
               }}
             >
-              <ActivityIndicator size='large' color={theme.colors.primary} />
+              <ActivityIndicator color={theme.colors.primary} />
             </View>
           )}
         </View>
         <View style={{ flex: 1, gap: 8, justifyContent: 'center' }}>
           <Text style={{ fontSize: 20, fontFamily: Poppins.SEMIBOLD }}>
-            {profile.first_name} {profile.last_name}
+            {profile?.first_name} {profile?.last_name}
           </Text>
           <View style={{ flexDirection: 'row', gap: 16 }}>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>

@@ -97,7 +97,7 @@ const EditProfile = (props: EditProfileProps) => {
           height: Dimensions.get('screen').height,
           overflow: 'hidden',
           backgroundColor: theme.colors.secondary,
-          paddingBottom: 32
+          paddingBottom: 32,
         }}
       >
         <View
