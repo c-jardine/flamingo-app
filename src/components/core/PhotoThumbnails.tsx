@@ -16,7 +16,12 @@ const PhotoThumbnails = (props: PhotoThumbnailsProps) => {
 
   return (
     <>
-      <Header title='Photo management' subtitle={`${photos.length} photos`} />
+      <Header
+        title='Photo management'
+        subtitle={`${photos.length} ${
+          photos.length === 1 ? 'photo' : 'photos'
+        }`}
+      />
 
       <ScrollView>
         <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 16 }}>
