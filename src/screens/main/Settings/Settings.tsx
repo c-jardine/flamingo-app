@@ -66,7 +66,7 @@ const Settings = (props: SettingsProps) => {
               <Text style={{ fontFamily: Poppins.REGULAR }}>View profile</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('EditProfile')}
+              onPress={() => navigation.navigate('EditProfileNavigator')}
             >
               <Text style={{ fontFamily: Poppins.REGULAR }}>Edit profile</Text>
             </TouchableOpacity>

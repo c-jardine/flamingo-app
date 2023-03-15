@@ -1,33 +1,37 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Tab, TabView, useTheme } from '@rneui/themed';
+import { Divider, Icon, Text, useTheme } from '@rneui/themed';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { PrimaryButton } from '../../../components/buttons';
 import { Header } from '../../../components/core';
 import { ProfileContext } from '../../../contexts';
-import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { EditProfileParamList } from '../../../navigators/EditProfileNavigator';
 import { ProfileProps } from '../../../types';
-import DatingForm from './DatingForm';
-import DetailsForm from './DetailsForm';
-import EntertainmentForm from './EntertainmentForm';
-import ProfileForm from './ProfileForm';
+import { Poppins } from '../../../utils';
+import AvatarUpload from './AvatarUpload';
+import DetailsFormDisplay from './DetailsFormDisplay';
+import ProfileFormDisplay from './ProfileFormDisplay';
 import { profileFormSchema } from './profileFormSchema';
 
 type EditProfileProps = NativeStackScreenProps<
-  MainStackParamList,
+  EditProfileParamList,
   'EditProfile'
 >;
 
 const EditProfile = (props: EditProfileProps) => {
+  const { navigation } = props;
   const { theme } = useTheme();
   const [loading, setLoading] = useState(false);
   const { profile, updateProfile } = React.useContext(ProfileContext);
-  const { goBack } = useNavigation();
-
-  const [tabIndex, setTabIndex] = React.useState<number>(0);
 
   const methods = useForm<ProfileProps>({
     defaultValues: React.useMemo(() => {
@@ -65,7 +69,7 @@ const EditProfile = (props: EditProfileProps) => {
         Alert.alert(error.message);
       }
     } finally {
-      goBack();
+      navigation.goBack();
     }
   };
 
@@ -77,74 +81,60 @@ const EditProfile = (props: EditProfileProps) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={Platform.OS === 'ios' && { flex: 1 }}
         >
-          <Tab
-            value={tabIndex}
-            onChange={(e) => setTabIndex(e)}
-            indicatorStyle={{
-              backgroundColor: theme.colors.primary,
-              height: 3,
-            }}
-          >
-            <Tab.Item
-              title='Profile'
-              icon={{
-                type: 'ionicon',
-                name: 'person-outline',
-                color: theme.colors.primary,
-                style: { paddingVertical: 8 },
-              }}
-              titleStyle={{ display: 'none' }}
-            />
-            <Tab.Item
-              title='Details'
-              icon={{
-                type: 'ionicon',
-                name: 'book-outline',
-                color: theme.colors.primary,
-                style: { paddingVertical: 8 },
-              }}
-              titleStyle={{ display: 'none' }}
-            />
-            <Tab.Item
-              title='Entertainment'
-              icon={{
-                type: 'ionicon',
-                name: 'film-outline',
-                color: theme.colors.primary,
-                style: { paddingVertical: 8 },
-              }}
-              titleStyle={{ display: 'none' }}
-            />
-            <Tab.Item
-              title='Dating'
-              icon={{
-                type: 'ionicon',
-                name: 'heart-outline',
-                color: theme.colors.primary,
-                style: { paddingVertical: 8 },
-              }}
-              titleStyle={{ display: 'none' }}
-            />
-          </Tab>
+          <ScrollView>
+            <View style={{ paddingVertical: 32, gap: 16 }}>
+              <View style={{ paddingHorizontal: 16, gap: 16 }}>
+                <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 24 }}>
+                  Avatar
+                </Text>
+                <AvatarUpload />
+              </View>
 
-          <TabView
-            value={tabIndex}
-            onChange={setTabIndex}
-          >
-            <TabView.Item style={{ width: '100%' }}>
-              <ProfileForm />
-            </TabView.Item>
-            <TabView.Item style={{ width: '100%' }}>
-              <DetailsForm />
-            </TabView.Item>
-            <TabView.Item style={{ width: '100%' }}>
-              <EntertainmentForm />
-            </TabView.Item>
-            <TabView.Item style={{ width: '100%' }}>
-              <DatingForm />
-            </TabView.Item>
-            <TabView.Item />
-          </TabView>
+              <Divider style={{ marginVertical: 8 }} />
+
+              <View style={{ paddingHorizontal: 16 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 24 }}>
+                    Personal info
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ProfileForm')}
+                  >
+                    <Icon type='ionicon' name='create-outline' />
+                  </TouchableOpacity>
+                </View>
+                <ProfileFormDisplay />
+              </View>
+
+              <Divider style={{ marginVertical: 8 }} />
+
+              <View style={{ paddingHorizontal: 16 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 24 }}>
+                    Details
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('DetailsForm')}
+                  >
+                    <Icon type='ionicon' name='create-outline' />
+                  </TouchableOpacity>
+                </View>
+                <DetailsFormDisplay />
+              </View>
+            </View>
+          </ScrollView>
         </KeyboardAvoidingView>
         <View
           style={{
@@ -154,7 +144,11 @@ const EditProfile = (props: EditProfileProps) => {
             gap: 16,
           }}
         >
-          <PrimaryButton variant='ghost' title='Cancel' onPress={goBack} />
+          <PrimaryButton
+            variant='ghost'
+            title='Cancel'
+            onPress={navigation.goBack}
+          />
           <PrimaryButton
             title={loading ? 'Loading ...' : 'Update'}
             onPress={methods.handleSubmit(_updateProfile)}

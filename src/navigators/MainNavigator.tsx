@@ -5,7 +5,6 @@ import { useSession } from '../hooks';
 import { Login } from '../screens/auth';
 import {
   About,
-  EditProfile,
   FriendManagement,
   Notifications,
   PhotoManagement,
@@ -14,12 +13,13 @@ import {
   Profile,
   Support,
 } from '../screens/main';
+import EditProfileNavigator from './EditProfileNavigator';
 import MainTabs from './MainTabs';
 
 export type MainStackParamList = {
   Tabs: undefined;
   Profile: undefined;
-  EditProfile: undefined;
+  EditProfileNavigator: undefined;
   Login: undefined;
   FriendManagement: undefined;
   PhotoManagement: undefined;
@@ -42,7 +42,10 @@ const MainNavigator = () => {
         <>
           <MainStack.Screen name='Tabs' component={MainTabs} />
           <MainStack.Screen name='Profile' component={Profile} />
-          <MainStack.Screen name='EditProfile' component={EditProfile} />
+          <MainStack.Screen
+            name='EditProfileNavigator'
+            component={EditProfileNavigator}
+          />
           <MainStack.Screen
             name='FriendManagement'
             component={FriendManagement}

@@ -6,7 +6,6 @@ import { DatePicker, KInput, ModalSelect } from '../../../components/inputs';
 import { useSession } from '../../../hooks';
 import { ProfileProps } from '../../../types';
 import { Poppins } from '../../../utils';
-import AvatarUpload from './AvatarUpload';
 
 const ProfileForm = () => {
   const { session } = useSession();
@@ -17,12 +16,8 @@ const ProfileForm = () => {
   } = useFormContext<ProfileProps>();
 
   return (
-    <ScrollView>
+    <>
       <View style={{ paddingVertical: 32 }}>
-        <AvatarUpload />
-
-        <Divider style={{ marginVertical: 16 }} />
-
         <KInput
           label='Email'
           value={session?.user.email}
@@ -241,7 +236,7 @@ const ProfileForm = () => {
           )}
         />
       </View>
-    </ScrollView>
+    </>
   );
 };
 export default ProfileForm;
