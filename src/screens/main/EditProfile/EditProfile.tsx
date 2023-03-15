@@ -1,43 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme } from '@rneui/themed';
-import { sub } from 'date-fns';
+import { Tab, TabView, useTheme } from '@rneui/themed';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import {
-  Alert,
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-} from 'react-native';
-import * as yup from 'yup';
+import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { PrimaryButton } from '../../../components/buttons';
+import { Header } from '../../../components/core';
 import { ProfileContext } from '../../../contexts';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { ProfileProps } from '../../../types';
+import DatingForm from './DatingForm';
+import DetailsForm from './DetailsForm';
+import EntertainmentForm from './EntertainmentForm';
 import ProfileForm from './ProfileForm';
-
-const schema = yup
-  .object({
-    first_name: yup
-      .string()
-      .required('Required')
-      .min(2, 'Must be at least 2 characters!')
-      .max(32, 'Must be less than 32 characters'),
-    last_name: yup.string().max(32, 'Must be less than 32 characters'),
-    tagline: yup.string().max(64, 'Too many characters'),
-    birthday: yup
-      .date()
-      .min(sub(new Date(), { years: 100 }), 'Must be less than 100 years old')
-      .max(sub(new Date(), { years: 18 }), 'Must be at least 18 years old'),
-    bio: yup.string().max(256, 'Too many characters'),
-    hobbies: yup.string().max(256, 'Too many characters'),
-    interests: yup.string().max(256, 'Too many characters'),
-  })
-  .required();
+import { profileFormSchema } from './profileFormSchema';
 
 type EditProfileProps = NativeStackScreenProps<
   MainStackParamList,
@@ -50,13 +27,15 @@ const EditProfile = (props: EditProfileProps) => {
   const { profile, updateProfile } = React.useContext(ProfileContext);
   const { goBack } = useNavigation();
 
+  const [tabIndex, setTabIndex] = React.useState<number>(0);
+
   const methods = useForm<ProfileProps>({
     defaultValues: React.useMemo(() => {
       if (profile) {
         return profile;
       }
     }, [profile]),
-    resolver: yupResolver(schema),
+    resolver: yupResolver(profileFormSchema),
   });
 
   /**
@@ -92,34 +71,81 @@ const EditProfile = (props: EditProfileProps) => {
 
   return (
     <FormProvider {...methods}>
-      <View
-        style={{
-          height: Dimensions.get('screen').height,
-          overflow: 'hidden',
-          backgroundColor: theme.colors.secondary,
-          paddingBottom: 32,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            paddingTop: 64,
-            paddingHorizontal: 16,
-            overflow: 'hidden',
-            backgroundColor: 'white',
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-          }}
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <Header title='Edit profile' />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={Platform.OS === 'ios' && { flex: 1 }}
         >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={Platform.OS === 'ios' && { flex: 1 }}
+          <Tab
+            value={tabIndex}
+            onChange={(e) => setTabIndex(e)}
+            indicatorStyle={{
+              backgroundColor: theme.colors.primary,
+              height: 3,
+            }}
           >
-            <ScrollView>
+            <Tab.Item
+              title='Profile'
+              icon={{
+                type: 'ionicon',
+                name: 'person-outline',
+                color: theme.colors.primary,
+                style: { paddingVertical: 8 },
+              }}
+              titleStyle={{ display: 'none' }}
+            />
+            <Tab.Item
+              title='Details'
+              icon={{
+                type: 'ionicon',
+                name: 'book-outline',
+                color: theme.colors.primary,
+                style: { paddingVertical: 8 },
+              }}
+              titleStyle={{ display: 'none' }}
+            />
+            <Tab.Item
+              title='Entertainment'
+              icon={{
+                type: 'ionicon',
+                name: 'film-outline',
+                color: theme.colors.primary,
+                style: { paddingVertical: 8 },
+              }}
+              titleStyle={{ display: 'none' }}
+            />
+            <Tab.Item
+              title='Dating'
+              icon={{
+                type: 'ionicon',
+                name: 'heart-outline',
+                color: theme.colors.primary,
+                style: { paddingVertical: 8 },
+              }}
+              titleStyle={{ display: 'none' }}
+            />
+          </Tab>
+
+          <TabView
+            value={tabIndex}
+            onChange={setTabIndex}
+          >
+            <TabView.Item style={{ width: '100%' }}>
               <ProfileForm />
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </View>
+            </TabView.Item>
+            <TabView.Item style={{ width: '100%' }}>
+              <DetailsForm />
+            </TabView.Item>
+            <TabView.Item style={{ width: '100%' }}>
+              <EntertainmentForm />
+            </TabView.Item>
+            <TabView.Item style={{ width: '100%' }}>
+              <DatingForm />
+            </TabView.Item>
+            <TabView.Item />
+          </TabView>
+        </KeyboardAvoidingView>
         <View
           style={{
             paddingHorizontal: 16,

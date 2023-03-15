@@ -3,11 +3,17 @@ export type ProfileProps = {
   avatar_url: string;
   bio: string;
   birthday: Date;
+  education: string;
   first_name: string;
   gender: string;
   hobbies: string;
   interests: string;
+  is_drinker: boolean;
+  is_smoker: boolean;
+  is_stoner: string;
+  job_title: string;
   last_name: string;
+  political_affiliation: string;
   profile_is_valid: boolean;
   tagline: string;
   updated_at?: Date;

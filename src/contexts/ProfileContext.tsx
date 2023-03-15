@@ -33,7 +33,7 @@ export const ProfileProvider = ({
       let { data, error, status } = await supabase
         .from('profiles')
         .select(
-          `id, avatar_url, bio, birthday, first_name, gender, hobbies, interests, last_name, profile_is_valid, tagline, website`
+          `id, avatar_url, bio, birthday, education, first_name, gender, hobbies, interests, is_drinker, is_smoker, is_stoner, job_title, last_name, political_affiliation, profile_is_valid, tagline, website`
         )
         .eq('id', session?.user.id)
         .single();
@@ -52,6 +52,7 @@ export const ProfileProvider = ({
   };
 
   const updateProfile = async (profileData: ProfileProps) => {
+    console.log(profileData)
     try {
       if (!session?.user) throw new Error('No user on the session!');
 
