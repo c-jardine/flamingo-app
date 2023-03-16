@@ -27,7 +27,7 @@ const Settings = (props: SettingsProps) => {
   const { photoUri } = useDownloadPhoto(profile?.avatar_url!);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <View
         style={{
           paddingTop: 64,

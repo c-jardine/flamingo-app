@@ -21,7 +21,7 @@ const MainTabs = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              type='ionicon'
+              type='material-community'
               name='home'
               color={focused ? theme.colors.primary : 'black'}
             />
@@ -34,8 +34,8 @@ const MainTabs = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              type='ionicon'
-              name='settings'
+              type='material-community'
+              name='cog'
               color={focused ? theme.colors.primary : 'black'}
             />
           ),
