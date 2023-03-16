@@ -2,22 +2,28 @@ import React from 'react';
 import { Alert } from 'react-native';
 import { supabase } from '../supabase';
 import { ProfileProps } from '../types';
+import { useLocation } from './useLocation';
 import { useSession } from './useSession';
 
-export const useNearbyUsers = () => {
+export const useNearbyUsers = (radius: number) => {
   const { session } = useSession();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { location } = useLocation();
   const [profiles, setProfiles] = React.useState<ProfileProps[]>([]);
 
   React.useEffect(() => {
     session &&
+      location &&
       (async () => {
         try {
           setIsLoading(true);
 
           const { data, error } = await supabase
-            .from('profiles')
-            .select()
+            .rpc('get_users_within_radius', {
+              long: location?.coords.longitude,
+              lat: location?.coords.latitude,
+              radius,
+            })
             .neq('id', session?.user.id);
 
           if (error) {
@@ -35,7 +41,7 @@ export const useNearbyUsers = () => {
           setIsLoading(false);
         }
       })();
-  }, [session]);
+  }, [session, location]);
 
   return { isLoading, profiles };
 };

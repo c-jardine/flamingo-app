@@ -1,14 +1,20 @@
-import { Text } from '@rneui/themed';
-import { formatDistanceStrict } from 'date-fns';
-import { Dimensions, View } from 'react-native';
-import { useLocation, useNearbyUsers } from '../../../hooks';
-import { Poppins } from '../../../utils';
-import PhotoThumbnail from './PhotoThumbnail';
+import { useTheme } from '@rneui/themed';
+import { ActivityIndicator, Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNearbyUsers } from '../../../hooks';
+import PhotoThumbnail from './PhotoThumbnail';
 
 const Home = () => {
-  const { location, error } = useLocation();
-  const { isLoading, profiles } = useNearbyUsers();
+  const { theme } = useTheme();
+  const { isLoading, profiles } = useNearbyUsers(1000);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size='large' color={theme.colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -20,35 +26,7 @@ const Home = () => {
             height: Dimensions.get('screen').width * 0.6,
           }}
         >
-          <PhotoThumbnail path={profile.avatar_url!} />
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              width: '100%',
-              padding: 8,
-              backgroundColor: 'rgba(0,0,0,0.25)',
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: Poppins.MEDIUM,
-                fontSize: 18,
-                color: 'white',
-              }}
-            >
-              {profile.first_name}
-            </Text>
-            <Text
-              style={{
-                fontFamily: Poppins.REGULAR,
-                fontSize: 14,
-                color: 'white',
-              }}
-            >
-              {formatDistanceStrict(new Date(profile.birthday!), new Date())}
-            </Text>
-          </View>
+          <PhotoThumbnail path={profile.avatar_url!} profile={profile} />
         </View>
       ))}
     </SafeAreaView>

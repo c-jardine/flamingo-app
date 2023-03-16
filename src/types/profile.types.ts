@@ -4,6 +4,7 @@ export type ProfileProps = {
   bio?: string;
   birthday?: Date;
   books?: string;
+  distance?: number;
   education?: string;
   first_name: string;
   gender?: string;
