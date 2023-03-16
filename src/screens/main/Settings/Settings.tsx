@@ -74,64 +74,65 @@ const Settings = (props: SettingsProps) => {
         </View>
       </View>
       <Divider />
-      <ScrollView style={{ flex: 1, padding: 16, paddingTop: 0 }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: 24,
-          }}
-        >
-          <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
-            Profile management
-          </Text>
-        </View>
-        <MenuButton onPress={() => navigation.navigate('FriendManagement')}>
-          Manage friends
-        </MenuButton>
-        <Divider />
-        <MenuButton onPress={() => navigation.navigate('PhotoManagement')}>
-          Your photos
-        </MenuButton>
+      <ScrollView>
+        <View style={{paddingVertical: 24, paddingHorizontal: 16}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
+              Profile management
+            </Text>
+          </View>
+          <MenuButton onPress={() => navigation.navigate('FriendManagement')}>
+            Manage friends
+          </MenuButton>
+          <Divider />
+          <MenuButton onPress={() => navigation.navigate('PhotoManagement')}>
+            Your photos
+          </MenuButton>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: 24,
-          }}
-        >
-          <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
-            Settings
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingTop: 24,
+            }}
+          >
+            <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 20 }}>
+              Settings
+            </Text>
+          </View>
+          <MenuButton onPress={() => navigation.navigate('PrivacyAndSecurity')}>
+            Privacy & security
+          </MenuButton>
+          <Divider />
+          <MenuButton onPress={() => navigation.navigate('Preferences')}>
+            Preferences
+          </MenuButton>
+          <Divider />
+          <MenuButton onPress={() => navigation.navigate('Notifications')}>
+            Notifications
+          </MenuButton>
+          <Divider />
+          <MenuButton onPress={() => navigation.navigate('Support')}>
+            Support
+          </MenuButton>
+          <Divider />
+          <MenuButton onPress={() => navigation.navigate('About')}>
+            About
+          </MenuButton>
+          <Divider />
+          <PrimaryButton
+            title='Sign out'
+            onPress={() => supabase.auth.signOut()}
+            style={{ marginTop: 24 }}
+          />
         </View>
-        <MenuButton onPress={() => navigation.navigate('PrivacyAndSecurity')}>
-          Privacy & security
-        </MenuButton>
-        <Divider />
-        <MenuButton onPress={() => navigation.navigate('Preferences')}>
-          Preferences
-        </MenuButton>
-        <Divider />
-        <MenuButton onPress={() => navigation.navigate('Notifications')}>
-          Notifications
-        </MenuButton>
-        <Divider />
-        <MenuButton onPress={() => navigation.navigate('Support')}>
-          Support
-        </MenuButton>
-        <Divider />
-        <MenuButton onPress={() => navigation.navigate('About')}>
-          About
-        </MenuButton>
-        <Divider />
-        <PrimaryButton
-          title='Sign out'
-          onPress={() => supabase.auth.signOut()}
-          style={{ marginTop: 24 }}
-        />
       </ScrollView>
     </View>
   );

@@ -36,31 +36,42 @@ const ProfileFormDisplay = () => {
         content={`${profile?.first_name} ${profile?.last_name}`}
         icon={{ type: 'material-community', name: 'account-outline' }}
       />
-      <IconDetails
-        content={`${format(
-          new Date(profile?.birthday!),
-          'MMMM dd, yyyy'
-        )} (${formatDistanceStrict(new Date(profile?.birthday!), new Date())})`}
-        icon={{ type: 'material-community', name: 'cake-variant-outline' }}
-      />
-      <IconDetails
-        content={profile?.gender!}
-        icon={{ type: 'material-community', name: genderIcon }}
-      />
-      <IconDetails
-        content={profile?.bio!}
-        icon={{
-          type: 'material-community',
-          name: 'card-account-details-outline',
-        }}
-      />
-      <IconDetails
-        content={profile?.website!}
-        icon={{
-          type: 'material-community',
-          name: 'web',
-        }}
-      />
+      {profile?.birthday && (
+        <IconDetails
+          content={`${format(
+            new Date(profile?.birthday!),
+            'MMMM dd, yyyy'
+          )} (${formatDistanceStrict(
+            new Date(profile?.birthday!),
+            new Date()
+          )})`}
+          icon={{ type: 'material-community', name: 'cake-variant-outline' }}
+        />
+      )}
+      {profile?.gender && (
+        <IconDetails
+          content={profile?.gender!}
+          icon={{ type: 'material-community', name: genderIcon }}
+        />
+      )}
+      {profile?.bio && (
+        <IconDetails
+          content={profile?.bio!}
+          icon={{
+            type: 'material-community',
+            name: 'card-account-details-outline',
+          }}
+        />
+      )}
+      {profile?.website && (
+        <IconDetails
+          content={profile?.website!}
+          icon={{
+            type: 'material-community',
+            name: 'web',
+          }}
+        />
+      )}
     </View>
   );
 };
