@@ -48,120 +48,112 @@ const Login = (props: LoginProps) => {
   };
 
   return (
-    <>
-      <View
-        style={{
-          height: Dimensions.get('screen').height,
-          overflow: 'hidden',
-          backgroundColor: theme.colors.secondary,
-          paddingBottom: 32,
-        }}
+    <View
+      style={{
+        flex: 1,
+        paddingTop: 64,
+        backgroundColor: 'white',
+      }}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={Platform.OS === 'ios' && { flex: 1 }}
       >
-        <View
-          style={{
-            flex: 1,
-            paddingTop: 64,
-            paddingHorizontal: 16,
-            overflow: 'hidden',
-            backgroundColor: 'white',
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-          }}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={Platform.OS === 'ios' && { flex: 1 }}
+        <ScrollView>
+          <View
+            style={{
+              paddingHorizontal: 16,
+            }}
           >
-            <ScrollView bounces={false}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  padding: 64,
-                }}
-              >
-                <Image
-                  source={{ uri: 'https://i.imgur.com/Sfn2JIY.png' }}
-                  containerStyle={{
-                    aspectRatio: 1,
-                    width: '100%',
-                    height: 175,
-                  }}
-                />
-              </View>
-              <Input
-                keyboardType='email-address'
-                leftIcon={{
-                  type: 'ionicon',
-                  name: 'mail-outline',
-                  color: 'rgba(0,0,0,0.35)',
-                }}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-                placeholder='Email'
-                autoCapitalize={'none'}
-                inputContainerStyle={{
-                  paddingVertical: 16,
-                }}
-                leftIconContainerStyle={{
-                  marginRight: 8,
+            <View
+              style={{
+                alignItems: 'center',
+                padding: 64,
+              }}
+            >
+              <Image
+                source={{ uri: 'https://i.imgur.com/Sfn2JIY.png' }}
+                containerStyle={{
+                  aspectRatio: 1,
+                  width: '100%',
+                  height: 125,
                 }}
               />
-              <Input
-                containerStyle={{ marginTop: -24 }}
-                leftIcon={{
-                  type: 'ionicon',
-                  name: 'lock-closed-outline',
-                  color: 'rgba(0,0,0,0.35)',
-                }}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-                secureTextEntry={true}
-                placeholder='Password'
-                autoCapitalize={'none'}
-                inputContainerStyle={{
-                  paddingVertical: 16,
-                }}
-                leftIconContainerStyle={{
-                  marginRight: 8,
-                }}
+            </View>
+            <Input
+              keyboardType='email-address'
+              leftIcon={{
+                type: 'material-community',
+                name: 'email-outline',
+                color: 'rgba(0,0,0,0.35)',
+              }}
+              onChangeText={(text) => setEmail(text)}
+              value={email}
+              placeholder='Email'
+              autoCapitalize={'none'}
+              inputContainerStyle={{
+                paddingVertical: 16,
+              }}
+              leftIconContainerStyle={{
+                marginRight: 8,
+              }}
+            />
+            <Input
+              containerStyle={{ marginTop: -24 }}
+              leftIcon={{
+                type: 'material-community',
+                name: 'lock-outline',
+                color: 'rgba(0,0,0,0.35)',
+              }}
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+              secureTextEntry={true}
+              placeholder='Password'
+              autoCapitalize={'none'}
+              inputContainerStyle={{
+                paddingVertical: 16,
+              }}
+              leftIconContainerStyle={{
+                marginRight: 8,
+              }}
+            />
+            <Text
+              style={{
+                marginTop: -8,
+                textAlign: 'right',
+                color: theme.colors.primary,
+                fontWeight: '600',
+              }}
+            >
+              Forgot password
+            </Text>
+
+            <View
+              style={{
+                marginTop: 64,
+                flexDirection: 'row',
+                gap: 16,
+              }}
+            >
+              <PrimaryButton
+                variant='ghost'
+                title='Sign up'
+                disabled={loading}
+                onPress={() => signUpWithEmail()}
+                containerStyle={{ flex: 1 }}
               />
-              <Text
-                style={{
-                  marginTop: -8,
-                  textAlign: 'right',
-                  color: theme.colors.primary,
-                  fontWeight: '600',
-                }}
-              >
-                Forgot password
-              </Text>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginTop: 32,
-            flexDirection: 'row',
-            gap: 16,
-          }}
-        >
-          <PrimaryButton
-            variant='ghost'
-            title='Sign up'
-            disabled={loading}
-            onPress={() => signUpWithEmail()}
-          />
-          <PrimaryButton
-            variant='solid'
-            title='Sign in'
-            disabled={loading}
-            onPress={() => signInWithEmail()}
-            titleStyle={{ fontFamily: 'Poppins_400Regular' }}
-          />
-        </View>
-      </View>
-    </>
+              <PrimaryButton
+                variant='solid'
+                title='Sign in'
+                disabled={loading}
+                onPress={() => signInWithEmail()}
+                containerStyle={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 

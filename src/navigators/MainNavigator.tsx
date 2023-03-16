@@ -38,31 +38,34 @@ const MainNavigator = () => {
   return (
     <NavigationContainer>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
-        {!session && <MainStack.Screen name='Login' component={Login} />}
-        <>
-          <MainStack.Screen name='Tabs' component={MainTabs} />
-          <MainStack.Screen name='Profile' component={Profile} />
-          <MainStack.Screen
-            name='EditProfileNavigator'
-            component={EditProfileNavigator}
-          />
-          <MainStack.Screen
-            name='FriendManagement'
-            component={FriendManagement}
-          />
-          <MainStack.Screen
-            name='PhotoManagement'
-            component={PhotoManagement}
-          />
-          <MainStack.Screen
-            name='PrivacyAndSecurity'
-            component={PrivacyAndSecurity}
-          />
-          <MainStack.Screen name='Preferences' component={Preferences} />
-          <MainStack.Screen name='Notifications' component={Notifications} />
-          <MainStack.Screen name='Support' component={Support} />
-          <MainStack.Screen name='About' component={About} />
-        </>
+        {session && session.user ? (
+          <>
+            <MainStack.Screen name='Tabs' component={MainTabs} />
+            <MainStack.Screen name='Profile' component={Profile} />
+            <MainStack.Screen
+              name='EditProfileNavigator'
+              component={EditProfileNavigator}
+            />
+            <MainStack.Screen
+              name='FriendManagement'
+              component={FriendManagement}
+            />
+            <MainStack.Screen
+              name='PhotoManagement'
+              component={PhotoManagement}
+            />
+            <MainStack.Screen
+              name='PrivacyAndSecurity'
+              component={PrivacyAndSecurity}
+            />
+            <MainStack.Screen name='Preferences' component={Preferences} />
+            <MainStack.Screen name='Notifications' component={Notifications} />
+            <MainStack.Screen name='Support' component={Support} />
+            <MainStack.Screen name='About' component={About} />
+          </>
+        ) : (
+          <MainStack.Screen name='Login' component={Login} />
+        )}
       </MainStack.Navigator>
     </NavigationContainer>
   );

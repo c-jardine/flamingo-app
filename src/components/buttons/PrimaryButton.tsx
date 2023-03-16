@@ -9,11 +9,7 @@ const PrimaryButton = (
   return (
     <Button
       {...props}
-      containerStyle={
-        {
-          // flex: 1,
-        }
-      }
+      containerStyle={props.containerStyle}
       buttonStyle={{
         backgroundColor:
           btnVariant === 'solid' ? theme.colors.primary : 'transparent',
