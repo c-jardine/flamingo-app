@@ -5,6 +5,13 @@ module.exports = function (api) {
     plugins: [
       ['module:react-native-dotenv'],
       // [
+      //   'expo-location',
+      //   {
+      //     locationAlwaysAndWhenInUsePermission:
+      //       'Allow Flamingo to use your location.',
+      //   },
+      // ],
+      // [
       //   'expo-image-picker',
       //   {
       //     photosPermission:
