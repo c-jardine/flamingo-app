@@ -13,6 +13,7 @@ import { EditProfileParamList } from '../../../navigators/EditProfileNavigator';
 import { Poppins } from '../../../utils';
 import AmusementFormDisplay from './AmusementFormDisplay';
 import AvatarUpload from './AvatarUpload';
+import DatingFormDisplay from './DatingFormDisplay';
 import DetailsFormDisplay from './DetailsFormDisplay';
 import ProfileFormDisplay from './ProfileFormDisplay';
 
@@ -104,6 +105,28 @@ const EditProfile = (props: EditProfileProps) => {
                 </TouchableOpacity>
               </View>
               <AmusementFormDisplay />
+            </View>
+
+            <Divider style={{ marginVertical: 8 }} />
+
+            <View style={{ paddingHorizontal: 16 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 24 }}>
+                  Dating
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('DatingForm')}
+                >
+                  <Icon type='material-community' name='square-edit-outline' />
+                </TouchableOpacity>
+              </View>
+              <DatingFormDisplay />
             </View>
           </View>
         </ScrollView>

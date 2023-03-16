@@ -19,6 +19,7 @@ export type ProfileProps = {
   personality_type?: string;
   political_affiliation?: string;
   profile_is_valid?: boolean;
+  relationship_type?: string;
   religion?: string;
   tagline?: string;
   tv_shows?: string;

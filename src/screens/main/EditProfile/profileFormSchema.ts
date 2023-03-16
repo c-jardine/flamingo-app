@@ -47,3 +47,9 @@ export const amusementFormSchema = yup
     tv_shows: yup.string().max(215, Message.MAX_LENGTH),
   })
   .required();
+
+export const datingFormSchema = yup
+  .object({
+    relationship_type: yup.string(),
+  })
+  .required();
