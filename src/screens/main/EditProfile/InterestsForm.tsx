@@ -41,12 +41,12 @@ const InterestsForm = () => {
   React.useEffect(() => {
     if (profile) {
       const initProfile = {
-        interests: profile.interests,
-        hobbies: profile.hobbies,
-        books: profile.books,
-        movies: profile.movies,
-        music: profile.music,
-        tv_shows: profile.tv_shows,
+        interests: profile.interests ?? '',
+        hobbies: profile.hobbies ?? '',
+        books: profile.books ?? '',
+        movies: profile.movies ?? '',
+        music: profile.music ?? '',
+        tv_shows: profile.tv_shows ?? '',
       };
       reset(initProfile);
     }

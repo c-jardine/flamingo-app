@@ -46,12 +46,12 @@ const ProfileForm = () => {
   React.useEffect(() => {
     if (profile) {
       const initProfile = {
-        first_name: profile.first_name,
-        last_name: profile.last_name,
+        first_name: profile.first_name ?? '',
+        last_name: profile.last_name ?? '',
         birthday: profile.birthday ?? new Date(),
-        gender: profile.gender,
-        bio: profile.bio,
-        website: profile.website,
+        gender: profile.gender ?? '',
+        bio: profile.bio ?? '',
+        website: profile.website ?? '',
       };
       reset(initProfile);
     }

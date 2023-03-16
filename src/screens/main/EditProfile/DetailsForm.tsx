@@ -45,14 +45,14 @@ const DetailsForm = () => {
   React.useEffect(() => {
     if (profile) {
       const initProfile = {
-        job_title: profile.job_title,
-        education: profile.education,
-        personality_type: profile.personality_type,
-        political_affiliation: profile.political_affiliation,
-        religion: profile.religion,
-        is_drinker: profile.is_drinker,
-        is_smoker: profile.is_smoker,
-        is_stoner: profile.is_stoner,
+        job_title: profile.job_title ?? '',
+        education: profile.education ?? '',
+        personality_type: profile.personality_type ?? '',
+        political_affiliation: profile.political_affiliation ?? '',
+        religion: profile.religion ?? '',
+        is_drinker: profile.is_drinker ?? false,
+        is_smoker: profile.is_smoker ?? false,
+        is_stoner: profile.is_stoner ?? false,
       };
       reset(initProfile);
     }

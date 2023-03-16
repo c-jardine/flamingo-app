@@ -139,12 +139,6 @@ const Profile = (props: ProfileProps) => {
               paddingHorizontal: 32,
             }}
           >
-            <TouchableOpacity
-              style={{ position: 'absolute', top: 16, right: 16 }}
-              onPress={() => navigation.navigate('EditProfile')}
-            >
-              <Icon type='ionicon' name='create-outline' size={24} />
-            </TouchableOpacity>
             <View
               style={{
                 marginVertical: 32,
