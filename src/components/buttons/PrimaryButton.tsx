@@ -8,9 +8,12 @@ const PrimaryButton = (
   const btnVariant = props.variant ?? 'solid';
   return (
     <Button
-      containerStyle={{
-        // flex: 1,
-      }}
+      {...props}
+      containerStyle={
+        {
+          // flex: 1,
+        }
+      }
       buttonStyle={{
         backgroundColor:
           btnVariant === 'solid' ? theme.colors.primary : 'transparent',
@@ -18,11 +21,13 @@ const PrimaryButton = (
         borderColor:
           btnVariant !== 'ghost' ? theme.colors.primary : 'transparent',
       }}
-      titleStyle={{
-        color:
-          btnVariant === 'solid' ? theme.colors.white : theme.colors.primary,
-      }}
-      {...props}
+      titleStyle={[
+        props.titleStyle,
+        {
+          color:
+            btnVariant === 'solid' ? theme.colors.white : theme.colors.primary,
+        },
+      ]}
     />
   );
 };

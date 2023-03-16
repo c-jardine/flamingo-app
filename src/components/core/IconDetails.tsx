@@ -9,8 +9,8 @@ interface IconDetailsProps {
 const IconDetails = (props: IconDetailsProps) => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-      <Icon size={20} color='rgba(0,0,0,0.5)' {...props.icon} />
-      <Text>{props.content}</Text>
+      <Icon size={24} color='rgba(0,0,0,0.25)' {...props.icon} />
+      <Text numberOfLines={1} ellipsizeMode='tail' style={{flex: 1}}>{props.content}</Text>
     </View>
   );
 };

@@ -13,23 +13,26 @@ const ModalSelect = React.forwardRef<
   const { value, onChange } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [icon, setIcon] = React.useState<string>('ellipse-outline');
+  const [icon, setIcon] = React.useState<string>('circle-outline');
 
   const handleSelect = (name: string) => {
     onChange(name);
 
     switch (name) {
       case 'Male':
-        setIcon('male');
+        setIcon('gender-male');
         break;
       case 'Female':
-        setIcon('female');
+        setIcon('gender-female');
+        break;
+      case 'Transgender':
+        setIcon('gender-transgender');
         break;
       case 'Non-binary':
-        setIcon('transgender');
+        setIcon('gender-non-binary');
         break;
       default:
-        setIcon('ellipse-outline');
+        setIcon('circle-outline');
     }
 
     onClose();
@@ -54,7 +57,7 @@ const ModalSelect = React.forwardRef<
         <HighlightIcon
           backgroundColor='#ede9fe'
           icon={{
-            type: 'ionicon',
+            type: 'material-community',
             name: icon,
             color: '#a78bfa',
           }}
@@ -70,26 +73,28 @@ const ModalSelect = React.forwardRef<
         <View
           style={{
             marginTop: 8,
-            gap: 8
+            gap: 8,
           }}
         >
           <PrimaryButton
-            variant={props.value === 'Male' ? 'solid' : 'outline'}
+            variant={value === 'Male' ? 'solid' : 'outline'}
             title='Male'
             onPress={() => handleSelect('Male')}
-            // containerStyle={{ height: 64 }}
           />
           <PrimaryButton
-            variant={props.value === 'Female' ? 'solid' : 'outline'}
+            variant={value === 'Female' ? 'solid' : 'outline'}
             title='Female'
             onPress={() => handleSelect('Female')}
-            // containerStyle={{ height: 64 }}
           />
           <PrimaryButton
-            variant={props.value === 'Non-binary' ? 'solid' : 'outline'}
+            variant={value === 'Transgender' ? 'solid' : 'outline'}
+            title='Transgender'
+            onPress={() => handleSelect('Transgender')}
+          />
+          <PrimaryButton
+            variant={value === 'Non-binary' ? 'solid' : 'outline'}
             title='Non-binary'
             onPress={() => handleSelect('Non-binary')}
-            // containerStyle={{ height: 64 }}
           />
         </View>
       </Dialog>

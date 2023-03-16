@@ -1,10 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Divider, Icon, Text } from '@rneui/themed';
+import { Button, Divider, Icon } from '@rneui/themed';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
-  ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -12,46 +11,42 @@ import {
   View,
 } from 'react-native';
 import { Header } from '../../../components/core';
-import { DatePicker, KInput, ModalSelect } from '../../../components/inputs';
+import { KInput } from '../../../components/inputs';
 import { ProfileContext } from '../../../contexts';
-import { useSession } from '../../../hooks';
 import { ProfileProps } from '../../../types';
-import { Poppins } from '../../../utils';
-import { profileFormSchema } from './profileFormSchema';
+import { interestsFormSchema } from './profileFormSchema';
 
-const ProfileForm = () => {
+const InterestsForm = () => {
   const { goBack } = useNavigation();
   const { profile, updateProfile } = React.useContext(ProfileContext);
-  const { session } = useSession();
   const [loading, setLoading] = React.useState(false);
 
   const {
     control,
     handleSubmit,
-    watch,
     reset,
     formState: { errors, isDirty },
   } = useForm<ProfileProps>({
     defaultValues: {
-      first_name: '',
-      last_name: '',
-      birthday: new Date(),
-      gender: '',
-      bio: '',
-      website: '',
+      interests: '',
+      hobbies: '',
+      books: '',
+      movies: '',
+      music: '',
+      tv_shows: '',
     },
-    resolver: yupResolver(profileFormSchema),
+    resolver: yupResolver(interestsFormSchema),
   });
 
   React.useEffect(() => {
     if (profile) {
       const initProfile = {
-        first_name: profile.first_name,
-        last_name: profile.last_name,
-        birthday: profile.birthday ?? new Date(),
-        gender: profile.gender,
-        bio: profile.bio,
-        website: profile.website,
+        interests: profile.interests,
+        hobbies: profile.hobbies,
+        books: profile.books,
+        movies: profile.movies,
+        music: profile.music,
+        tv_shows: profile.tv_shows,
       };
       reset(initProfile);
     }
@@ -73,7 +68,7 @@ const ProfileForm = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Header title='Personal details' />
+      <Header title='Interests and hobbies' />
       {isDirty && (
         <Button
           title={
@@ -104,157 +99,129 @@ const ProfileForm = () => {
           <View
             style={{ paddingTop: 16, paddingBottom: 32, paddingHorizontal: 8 }}
           >
-            <KInput label='Email' value={session?.user.email} disabled />
-
-            <Divider style={{ marginVertical: 16 }} />
-
             <Controller
-              name='first_name'
+              name='interests'
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <KInput
-                  autoComplete='name-given'
-                  label='First name'
-                  placeholder='Flamingo'
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  errorMessage={errors.first_name?.message as string}
-                  errorStyle={{
-                    display: errors.first_name ? 'flex' : 'none',
-                  }}
-                />
-              )}
-            />
-
-            <Divider style={{ marginVertical: 16 }} />
-
-            <Controller
-              name='last_name'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <KInput
-                  autoComplete='name-family'
-                  label='Last name'
-                  placeholder='Jones'
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  errorMessage={errors.last_name?.message as string}
-                  errorStyle={{
-                    display: errors.last_name ? 'flex' : 'none',
-                  }}
-                />
-              )}
-            />
-
-            <Divider style={{ marginVertical: 16 }} />
-
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingLeft: 8,
-                }}
-              >
-                <Text style={{ fontFamily: Poppins.MEDIUM, color: 'black' }}>
-                  Birthday
-                </Text>
-                {watch('birthday') ? (
-                  <Controller
-                    name='birthday'
-                    control={control}
-                    render={({ field }) => <DatePicker {...field} />}
-                  />
-                ) : (
-                  <ActivityIndicator />
-                )}
-              </View>
-              {errors.birthday && (
-                <Text
-                  style={{
-                    marginTop: 12,
-                    color: 'red',
-                    fontSize: 12,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  {errors.birthday?.message}
-                </Text>
-              )}
-            </View>
-
-            <Divider style={{ marginVertical: 16 }} />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingLeft: 8,
-              }}
-            >
-              <Text style={{ fontFamily: Poppins.MEDIUM, color: 'black' }}>
-                Gender
-              </Text>
-              <Controller
-                name='gender'
-                control={control}
-                render={({ field }) => {
-                  return <ModalSelect {...field} />;
-                }}
-              />
-            </View>
-
-            <Divider style={{ marginVertical: 16 }} />
-
-            <Controller
-              name='bio'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <KInput
-                  label='Bio'
-                  placeholder='Tell people about yourself'
                   multiline
+                  label='Interests'
+                  placeholder='Add some things that interest you, such as arts and crafts, blogging, and cooking.'
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  errorMessage={errors.bio?.message as string}
+                  errorMessage={errors.interests?.message as string}
                   errorStyle={{
-                    display: errors.bio ? 'flex' : 'none',
+                    display: errors.interests ? 'flex' : 'none',
                   }}
                 />
               )}
             />
-
             <Divider style={{ marginVertical: 16 }} />
 
             <Controller
-              name='website'
+              name='hobbies'
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <KInput
-                  keyboardType='url'
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  label='Website'
-                  placeholder='Enter your website url'
+                  multiline
+                  label='Hobbies'
+                  placeholder='Add your favorite hobbies, such as working out, playing video games, and cooking.'
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  errorMessage={errors.website?.message as string}
+                  errorMessage={errors.hobbies?.message as string}
                   errorStyle={{
-                    display: errors.website ? 'flex' : 'none',
+                    display: errors.hobbies ? 'flex' : 'none',
                   }}
                 />
               )}
             />
+            <Divider style={{ marginVertical: 16 }} />
+
+            <Controller
+              name='books'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <KInput
+                  multiline
+                  label='Books'
+                  placeholder='Add your favorite books or book genres.'
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  errorMessage={errors.books?.message as string}
+                  errorStyle={{
+                    display: errors.books ? 'flex' : 'none',
+                  }}
+                />
+              )}
+            />
+            <Divider style={{ marginVertical: 16 }} />
+
+            <Controller
+              name='movies'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <KInput
+                  multiline
+                  label='Movies'
+                  placeholder='Add your favorite movies or movie genres.'
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  errorMessage={errors.movies?.message as string}
+                  errorStyle={{
+                    display: errors.movies ? 'flex' : 'none',
+                  }}
+                />
+              )}
+            />
+            <Divider style={{ marginVertical: 16 }} />
+
+            <Controller
+              name='music'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <KInput
+                  multiline
+                  label='Music'
+                  placeholder='Add your favorite musicians or musical genres.'
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  errorMessage={errors.music?.message as string}
+                  errorStyle={{
+                    display: errors.music ? 'flex' : 'none',
+                  }}
+                />
+              )}
+            />
+            <Divider style={{ marginVertical: 16 }} />
+
+            <Controller
+              name='tv_shows'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <KInput
+                  multiline
+                  label='TV Shows'
+                  placeholder='Add your favorite TV shows or TV show genres.'
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  errorMessage={errors.tv_shows?.message as string}
+                  errorStyle={{
+                    display: errors.tv_shows ? 'flex' : 'none',
+                  }}
+                />
+              )}
+            />
+            <Divider style={{ marginVertical: 16 }} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
 };
-export default ProfileForm;
+export default InterestsForm;

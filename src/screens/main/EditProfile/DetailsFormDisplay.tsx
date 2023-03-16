@@ -11,27 +11,52 @@ const DetailsFormDisplay = () => {
       {profile?.job_title && (
         <IconDetails
           content={profile.job_title}
-          icon={{ type: 'ionicon', name: 'construct-outline' }}
+          icon={{ type: 'material-community', name: 'briefcase-outline' }}
         />
       )}
       {profile?.education && (
         <IconDetails
           content={profile.education}
-          icon={{ type: 'ionicon', name: 'school-outline' }}
+          icon={{ type: 'material-community', name: 'school-outline' }}
         />
       )}
       {profile?.political_affiliation && (
         <IconDetails
           content={profile.political_affiliation}
-          icon={{ type: 'ionicon', name: 'home-outline' }}
+          icon={{ type: 'material-community', name: 'scale-balance' }}
         />
       )}
-      {(profile?.is_drinker || profile?.is_smoker || profile?.is_stoner) && (
+      {profile?.religion && (
         <IconDetails
-          content={`${profile?.is_drinker ? 'Drinker, ' : ''}${
-            profile?.is_smoker ? (profile.is_stoner ? 'Smoker, ' : 'Smoker') : ''
-          }${profile?.is_stoner ? 'Stoner' : ''}`}
-          icon={{ type: 'ionicon', name: 'beer-outline' }}
+          content={profile.religion}
+          icon={{ type: 'material-community', name: 'hands-pray' }}
+        />
+      )}
+      {profile?.personality_type && (
+        <IconDetails
+          content={profile.personality_type}
+          icon={{
+            type: 'material-community',
+            name: 'head-dots-horizontal-outline',
+          }}
+        />
+      )}
+      {profile?.is_drinker && (
+        <IconDetails
+          content='Drinker'
+          icon={{ type: 'material-community', name: 'liquor' }}
+        />
+      )}
+      {profile?.is_smoker && (
+        <IconDetails
+          content='Smoker'
+          icon={{ type: 'material-community', name: 'smoking' }}
+        />
+      )}
+      {profile?.is_stoner && (
+        <IconDetails
+          content='Stoner'
+          icon={{ type: 'material-community', name: 'cannabis' }}
         />
       )}
     </View>
