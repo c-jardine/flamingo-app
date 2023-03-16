@@ -14,9 +14,9 @@ import { Header } from '../../../components/core';
 import { KInput } from '../../../components/inputs';
 import { ProfileContext } from '../../../contexts';
 import { ProfileProps } from '../../../types';
-import { interestsFormSchema } from './profileFormSchema';
+import { amusementFormSchema } from './profileFormSchema';
 
-const InterestsForm = () => {
+const AmusementForm = () => {
   const { goBack } = useNavigation();
   const { profile, updateProfile } = React.useContext(ProfileContext);
   const [loading, setLoading] = React.useState(false);
@@ -35,7 +35,7 @@ const InterestsForm = () => {
       music: '',
       tv_shows: '',
     },
-    resolver: yupResolver(interestsFormSchema),
+    resolver: yupResolver(amusementFormSchema),
   });
 
   React.useEffect(() => {
@@ -68,7 +68,7 @@ const InterestsForm = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Header title='Interests and hobbies' />
+      <Header title='Amusement' />
       {isDirty && (
         <Button
           title={
@@ -224,4 +224,4 @@ const InterestsForm = () => {
     </View>
   );
 };
-export default InterestsForm;
+export default AmusementForm;

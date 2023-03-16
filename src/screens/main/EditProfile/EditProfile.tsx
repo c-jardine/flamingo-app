@@ -11,9 +11,9 @@ import {
 import { Header } from '../../../components/core';
 import { EditProfileParamList } from '../../../navigators/EditProfileNavigator';
 import { Poppins } from '../../../utils';
+import AmusementFormDisplay from './AmusementFormDisplay';
 import AvatarUpload from './AvatarUpload';
 import DetailsFormDisplay from './DetailsFormDisplay';
-import InterestsFormDisplay from './InterestsFormDisplay';
 import ProfileFormDisplay from './ProfileFormDisplay';
 
 type EditProfileProps = NativeStackScreenProps<
@@ -95,15 +95,15 @@ const EditProfile = (props: EditProfileProps) => {
                 }}
               >
                 <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 24 }}>
-                  Interests
+                  Amusement
                 </Text>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('InterestsForm')}
+                  onPress={() => navigation.navigate('AmusementForm')}
                 >
                   <Icon type='material-community' name='square-edit-outline' />
                 </TouchableOpacity>
               </View>
-              <InterestsFormDisplay />
+              <AmusementFormDisplay />
             </View>
           </View>
         </ScrollView>

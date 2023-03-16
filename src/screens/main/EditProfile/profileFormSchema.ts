@@ -37,7 +37,7 @@ export const detailsFormSchema = yup
   })
   .required();
 
-export const interestsFormSchema = yup
+export const amusementFormSchema = yup
   .object({
     interests: yup.string().max(215, Message.MAX_LENGTH),
     hobbies: yup.string().max(215, Message.MAX_LENGTH),

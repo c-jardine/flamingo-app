@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { IconDetails } from '../../../components/core';
 import { ProfileContext } from '../../../contexts';
 
-const InterestsFormDisplay = () => {
+const AmusementFormDisplay = () => {
   const { profile } = React.useContext(ProfileContext);
 
   return (
@@ -53,4 +53,4 @@ const InterestsFormDisplay = () => {
     </View>
   );
 };
-export default InterestsFormDisplay;
+export default AmusementFormDisplay;
