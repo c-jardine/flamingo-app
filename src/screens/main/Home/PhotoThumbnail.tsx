@@ -75,7 +75,7 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
                 color: 'white',
               }}
             >
-              {props.profile.first_name},
+              {props.profile.first_name},{' '}
               {differenceInYears(
                 new Date(),
                 new Date(props.profile?.birthday!)
@@ -85,7 +85,7 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
               style={{
                 fontFamily: Poppins.REGULAR,
                 fontSize: 14,
-                color: 'white',
+                color: 'rgba(255,255,255,0.75)',
               }}
             >
               {formatDistance(props.profile.distance!)}
