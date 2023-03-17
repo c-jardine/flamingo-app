@@ -19,6 +19,22 @@ const AmusementTabView = (props: AmusementTabViewProps) => {
         {profile.hobbies && (
           <TextSection header='Hobbies' content={profile.hobbies} />
         )}
+
+        {profile.books && (
+          <TextSection header='Books' content={profile.books} />
+        )}
+
+        {profile.movies && (
+          <TextSection header='Movies' content={profile.movies} />
+        )}
+
+        {profile.music && (
+          <TextSection header='Music' content={profile.music} />
+        )}
+
+        {profile.tv_shows && (
+          <TextSection header='TV Shows' content={profile.tv_shows} />
+        )}
       </View>
     </View>
   );
