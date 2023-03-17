@@ -9,11 +9,11 @@ import AvatarUploadLoader from './AvatarUploadLoader';
 
 const AvatarUpload = () => {
   const { profile, updateProfile } = React.useContext(ProfileContext);
-  const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
+  const { loading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
 
   return (
     <>
-      {isDownloading || !photoUri ? (
+      {loading || !photoUri ? (
         <AvatarUploadLoader />
       ) : (
         <AvatarInput

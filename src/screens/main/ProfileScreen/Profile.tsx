@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Text, useTheme } from '@rneui/themed';
+import { Image, Text } from '@rneui/themed';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -31,15 +31,16 @@ const TABS = [
 ];
 
 const Profile = (props: ProfileProps) => {
-  const { theme } = useTheme();
   const { loading, profile } = useProfile(props.route.params.id);
-  const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
+  const { loading: downloading, photoUri } = useDownloadPhoto(
+    profile?.avatar_url!
+  );
   const [selectedTab, setSelectedTab] = React.useState<string>('personal');
 
   const disclosure = useDisclosure();
   const gallery = [{ uri: photoUri }];
 
-  if (isDownloading || !photoUri || loading || !profile) {
+  if (loading || downloading || !profile) {
     return <SplashScreen />;
   }
 

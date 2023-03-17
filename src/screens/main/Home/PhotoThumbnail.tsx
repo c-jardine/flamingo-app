@@ -16,7 +16,7 @@ interface PhotoThumbnailProps {
 
 const PhotoThumbnail = (props: PhotoThumbnailProps) => {
   const { theme } = useTheme();
-  const { isDownloading, photoUri } = useDownloadPhoto(props.path);
+  const { loading, photoUri } = useDownloadPhoto(props.path);
 
   const formatDistance = (distance: number) => {
     const dist = distance * METERS_TO_FEET;
@@ -46,7 +46,7 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
         flex: 1,
       }}
     >
-      {isDownloading || !photoUri ? (
+      {loading || !photoUri ? (
         <View
           style={{
             width: '100%',

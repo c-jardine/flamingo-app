@@ -12,7 +12,7 @@ interface PhotoThumbnailProps {
 
 const PhotoThumbnail = (props: PhotoThumbnailProps) => {
   const { theme } = useTheme();
-  const { isDownloading, photoUri } = useDownloadPhoto(props.path);
+  const { loading, photoUri } = useDownloadPhoto(props.path);
   const { profile } = React.useContext(ProfileContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -22,7 +22,7 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
         flex: 1,
       }}
     >
-      {isDownloading || !photoUri ? (
+      {loading || !photoUri ? (
         <ThumbnailLoading />
       ) : (
         <>

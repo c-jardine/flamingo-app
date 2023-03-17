@@ -2,7 +2,7 @@ import React from 'react';
 import { supabase } from '../supabase';
 
 export const useDownloadPhoto = (path: string) => {
-  const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [photoUri, setPhotoUri] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -11,7 +11,7 @@ export const useDownloadPhoto = (path: string) => {
 
   const downloadPhoto = async () => {
     try {
-      setIsDownloading(true);
+      setLoading(true);
 
       const { data, error } = await supabase.storage
         .from('avatars')
@@ -31,9 +31,9 @@ export const useDownloadPhoto = (path: string) => {
         setPhotoUri('https://i.imgur.com/9rUZBZ0.png');
       }
     } finally {
-      setIsDownloading(false);
+      setLoading(false);
     }
   };
 
-  return { isDownloading, photoUri };
+  return { loading, photoUri };
 };
