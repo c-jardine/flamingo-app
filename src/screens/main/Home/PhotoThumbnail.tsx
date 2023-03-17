@@ -1,8 +1,8 @@
 import { Image, Text, useTheme } from '@rneui/themed';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { useDisclosure, useDownloadPhoto } from '../../../hooks';
+import { View } from 'react-native';
+import { useDownloadPhoto } from '../../../hooks';
 import { ProfileProps } from '../../../types';
 import { Poppins } from '../../../utils';
 
@@ -49,46 +49,49 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
           }}
         />
       ) : (
-        <>
-          <TouchableOpacity onPress={() => console.log("Open profile", props.profile.first_name)}>
-            <Image
-              source={{ uri: photoUri }}
-              style={{ width: '100%', height: '100%' }}
-            />
-            <View
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <Image
+            source={{ uri: photoUri }}
+            style={{ width: '100%', height: '100%' }}
+          />
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              padding: 8,
+              backgroundColor: 'rgba(0,0,0,0.25)',
+            }}
+          >
+            <Text
               style={{
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                padding: 8,
-                backgroundColor: 'rgba(0,0,0,0.25)',
+                fontFamily: Poppins.MEDIUM,
+                fontSize: 18,
+                color: 'white',
               }}
             >
-              <Text
-                style={{
-                  fontFamily: Poppins.MEDIUM,
-                  fontSize: 18,
-                  color: 'white',
-                }}
-              >
-                {props.profile.first_name},
-                {differenceInYears(
-                  new Date(),
-                  new Date(props.profile?.birthday!)
-                )}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: Poppins.REGULAR,
-                  fontSize: 14,
-                  color: 'white',
-                }}
-              >
-                {formatDistance(props.profile.distance!)}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </>
+              {props.profile.first_name},
+              {differenceInYears(
+                new Date(),
+                new Date(props.profile?.birthday!)
+              )}
+            </Text>
+            <Text
+              style={{
+                fontFamily: Poppins.REGULAR,
+                fontSize: 14,
+                color: 'white',
+              }}
+            >
+              {formatDistance(props.profile.distance!)}
+            </Text>
+          </View>
+        </View>
       )}
     </View>
   );

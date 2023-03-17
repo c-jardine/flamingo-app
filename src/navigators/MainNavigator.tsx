@@ -17,8 +17,9 @@ import EditProfileNavigator from './EditProfileNavigator';
 import MainTabs from './MainTabs';
 
 export type MainStackParamList = {
+  Home: undefined;
   Tabs: undefined;
-  Profile: undefined;
+  Profile: { id: string };
   EditProfileNavigator: undefined;
   Login: undefined;
   FriendManagement: undefined;
@@ -41,7 +42,11 @@ const MainNavigator = () => {
         {session && session.user ? (
           <>
             <MainStack.Screen name='Tabs' component={MainTabs} />
-            <MainStack.Screen name='Profile' component={Profile} />
+            <MainStack.Screen
+              name='Profile'
+              component={Profile}
+              initialParams={{ id: session.user.id }}
+            />
             <MainStack.Screen
               name='EditProfileNavigator'
               component={EditProfileNavigator}

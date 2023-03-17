@@ -62,7 +62,11 @@ const Settings = (props: SettingsProps) => {
             {profile?.first_name} {profile?.last_name}
           </Text>
           <View style={{ flexDirection: 'row', gap: 16 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Profile', { id: profile?.id! })
+              }
+            >
               <Text style={{ fontFamily: Poppins.REGULAR }}>View profile</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -75,7 +79,7 @@ const Settings = (props: SettingsProps) => {
       </View>
       <Divider />
       <ScrollView>
-        <View style={{paddingVertical: 24, paddingHorizontal: 16}}>
+        <View style={{ paddingVertical: 24, paddingHorizontal: 16 }}>
           <View
             style={{
               flexDirection: 'row',

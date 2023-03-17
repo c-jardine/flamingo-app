@@ -1,177 +1,94 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Icon, Image, Text, useTheme } from '@rneui/themed';
+import { Image, Text, useTheme } from '@rneui/themed';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
-import {
-  ActivityIndicator,
-  Dimensions,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import ImageView from 'react-native-image-viewing';
-import { IconButton } from '../../../components/buttons';
-import { TextSection } from '../../../components/core';
+import { TouchableOpacity, View } from 'react-native';
 import { SplashScreen } from '../../../components/utils';
-import { ProfileContext } from '../../../contexts';
-import { useDisclosure, useDownloadPhoto } from '../../../hooks';
+import { useDisclosure, useDownloadPhoto, useProfile } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { Poppins } from '../../../utils';
+import AmusementTabView from './AmusementTabView';
+import PersonalTabView from './PersonalTabView';
+import ProfileLayout from './ProfileLayout';
+import ProfilePhotoViewer from './ProfilePhotoViewer';
+import Tabs from './Tabs';
 
 type ProfileProps = NativeStackScreenProps<MainStackParamList, 'Profile'>;
 
-const Profile = (props: ProfileProps) => {
-  const { navigation } = props;
-  const { theme } = useTheme();
-  const { profile } = React.useContext(ProfileContext);
-  const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const TABS = [
+  {
+    name: 'personal',
+    label: 'Personal',
+    icon: { name: 'account' },
+    view: PersonalTabView,
+  },
+  {
+    name: 'details',
+    label: 'Details',
+    icon: { name: 'card-account-details' },
+    view: AmusementTabView,
+  },
+];
 
+const Profile = (props: ProfileProps) => {
+  const { theme } = useTheme();
+  const { isLoading, profile } = useProfile(props.route.params.id);
+  const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
+  const [selectedTab, setSelectedTab] = React.useState<string>('personal');
+
+  const disclosure = useDisclosure();
   const gallery = [{ uri: photoUri }];
 
-  const [imageOpacity, setImageOpacity] = React.useState<number>(0);
-
-  const _handleScrollPos = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const relativePosition =
-      event.nativeEvent.contentOffset.y / event.nativeEvent.contentSize.width;
-    if (relativePosition <= 1) {
-      setImageOpacity(1 - relativePosition + 0.15);
-    }
-  };
-
-  if (!profile) {
+  if (isDownloading || !photoUri || isLoading || !profile) {
     return <SplashScreen />;
   }
 
   return (
-    <View style={{ backgroundColor: 'white' }}>
-      <TouchableOpacity onPress={onOpen}>
-        {isDownloading || !photoUri ? (
-          <View
-            style={{
-              aspectRatio: 1,
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <ActivityIndicator size='large' color={theme.colors.primary} />
-          </View>
-        ) : (
-          <Image
-            source={{
-              uri: photoUri,
-            }}
-            style={{
-              aspectRatio: 1,
-              width: '100%',
-              borderBottomLeftRadius: 32,
-              borderBottomRightRadius: 32,
-            }}
-          />
-        )}
-      </TouchableOpacity>
-      <ImageView
-        images={gallery}
-        imageIndex={0}
-        visible={isOpen}
-        onRequestClose={onClose}
-        FooterComponent={({ imageIndex }) => {
-          return (
-            <View
-              style={{
-                alignItems: 'center',
-                paddingVertical: 32,
-              }}
-            >
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: 112,
-                  justifyContent: 'center',
-                  alignItems: 'flex-end',
-                  paddingHorizontal: 16,
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.15)',
-                    padding: 8,
-                    borderRadius: 8,
-                  }}
-                >
-                  <Text
-                    style={{ color: 'rgba(255,255,255,0.35)', fontSize: 16 }}
-                  >
-                    {imageIndex + 1} / {gallery.length}
-                  </Text>
-                </View>
-              </View>
-              <IconButton
-                icon={{ type: 'ionicon', name: 'heart' }}
-                onPress={() => console.log('like')}
-              />
-            </View>
-          );
-        }}
-      />
+    <ProfileLayout backgroundImg={photoUri}>
       <View
         style={{
-          flex: 1,
-          backgroundColor: 'white',
-          paddingBottom: 32,
-          minHeight:
-            Dimensions.get('screen').height - Dimensions.get('screen').width,
+          paddingTop: 96,
+          paddingBottom: 8,
         }}
       >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          onScroll={_handleScrollPos}
-          scrollEventThrottle={5}
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 20,
+            paddingHorizontal: 16,
+          }}
         >
-          <View
-            style={{
-              paddingHorizontal: 32,
-            }}
-          >
-            <View
+          <TouchableOpacity onPress={disclosure.onOpen}>
+            <Image
+              source={{ uri: photoUri }}
+              style={{ aspectRatio: 1, width: 100, borderRadius: 50 }}
+            />
+          </TouchableOpacity>
+          <View style={{ flex: 1, marginTop: 32 }}>
+            <Text
               style={{
-                marginVertical: 32,
+                fontSize: 30,
+                fontFamily: Poppins.SEMIBOLD,
+                color: 'rgba(255,255,255,0.75)',
               }}
             >
-              <Text
-                style={{
-                  fontSize: 30,
-                  fontFamily: Poppins.SEMIBOLD,
-                }}
-              >
-                {profile?.first_name},{' '}
-                {differenceInYears(new Date(), new Date(profile?.birthday!))}
-              </Text>
-              <Text style={{ marginTop: 8, color: 'rgba(0,0,0,0.5)' }}>
-                {profile?.tagline}
-              </Text>
-            </View>
-            <View style={{ gap: 32 }}>
-              <TextSection header='About' content={profile?.bio as string} />
-              <TextSection
-                header='Interests'
-                content={profile?.interests as string}
-              />
-              <TextSection
-                header='Hobbies'
-                content={profile?.hobbies as string}
-              />
-            </View>
+              {profile?.first_name},{' '}
+              {differenceInYears(new Date(), new Date(profile?.birthday!))}
+            </Text>
           </View>
-        </ScrollView>
+        </View>
+
+        <Tabs tabs={TABS} selected={selectedTab} onChange={setSelectedTab} />
       </View>
-    </View>
+
+      <View>
+        {React.createElement(
+          TABS.filter((tab) => tab.name === selectedTab)[0].view!,
+          { profile }
+        )}
+      </View>
+      <ProfilePhotoViewer gallery={gallery} disclosure={disclosure} />
+    </ProfileLayout>
   );
 };
 export default Profile;

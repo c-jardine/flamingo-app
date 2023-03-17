@@ -1,10 +1,20 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@rneui/themed';
-import { ActivityIndicator, Dimensions, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNearbyUsers } from '../../../hooks';
+import { MainStackParamList } from '../../../navigators/MainNavigator';
 import PhotoThumbnail from './PhotoThumbnail';
 
-const Home = () => {
+type HomeProps = NativeStackScreenProps<MainStackParamList, 'Home'>;
+
+const Home = (props: HomeProps) => {
+  const { navigation } = props;
   const { theme } = useTheme();
   const { isLoading, profiles } = useNearbyUsers(1000);
 
@@ -19,15 +29,16 @@ const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {profiles?.map((profile) => (
-        <View
+        <TouchableOpacity
           key={profile.id}
           style={{
             width: Dimensions.get('screen').width / 2,
             height: Dimensions.get('screen').width * 0.6,
           }}
+          onPress={() => navigation.navigate('Profile', { id: profile.id! })}
         >
           <PhotoThumbnail path={profile.avatar_url!} profile={profile} />
-        </View>
+        </TouchableOpacity>
       ))}
     </SafeAreaView>
   );
