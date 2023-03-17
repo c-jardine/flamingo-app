@@ -7,7 +7,7 @@ import { useSession } from './useSession';
 
 export const useNearbyUsers = (radius: number) => {
   const { session } = useSession();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { location } = useLocation();
   const [profiles, setProfiles] = React.useState<ProfileProps[]>([]);
 
@@ -16,7 +16,7 @@ export const useNearbyUsers = (radius: number) => {
       location &&
       (async () => {
         try {
-          setIsLoading(true);
+          setLoading(true);
 
           const { data, error } = await supabase
             .rpc('get_users_within_radius', {
@@ -31,17 +31,15 @@ export const useNearbyUsers = (radius: number) => {
           }
 
           setProfiles(data as ProfileProps[]);
-          console.log('DATA', data);
         } catch (error) {
           if (error instanceof Error) {
-            console.log('ERROR', error.message);
             Alert.alert(error.message);
           }
         } finally {
-          setIsLoading(false);
+          setLoading(false);
         }
       })();
   }, [session, location]);
 
-  return { isLoading, profiles };
+  return { loading, profiles };
 };

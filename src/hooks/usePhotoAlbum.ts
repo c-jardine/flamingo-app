@@ -4,7 +4,7 @@ import { supabase } from '../supabase';
 import { PhotoProps } from '../types';
 
 export const usePhotoAlbum = (folderName: string) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [photos, setPhotos] = React.useState<PhotoProps[]>([]);
 
   React.useEffect(() => {
@@ -15,7 +15,7 @@ export const usePhotoAlbum = (folderName: string) => {
 
   const getPhotos = async () => {
     try {
-      setIsLoading(true);
+      setLoading(true);
 
       const { data, error } = await supabase.storage
         .from('avatars')
@@ -35,7 +35,7 @@ export const usePhotoAlbum = (folderName: string) => {
         Alert.alert(error.message);
       }
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 

@@ -5,7 +5,7 @@ import { supabase } from '../supabase';
 import { ProfileProps } from '../types';
 
 export const usePhotoManager = () => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<unknown>(null);
   const [photoUri, setPhotoUri] = React.useState<string>('');
 
@@ -37,7 +37,7 @@ export const usePhotoManager = () => {
     updateProfile: (data: ProfileProps) => void
   ) => {
     try {
-      setIsLoading(true);
+      setLoading(true);
       const fileExt = photoUri?.split('.').pop();
 
       const photoData = {
@@ -63,13 +63,13 @@ export const usePhotoManager = () => {
     } catch (error) {
       setError(error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const deletePhotos = async (photos: string[]) => {
     try {
-      setIsLoading(true);
+      setLoading(true);
 
       const { error } = await supabase.storage.from('avatars').remove(photos);
 
@@ -81,12 +81,12 @@ export const usePhotoManager = () => {
         Alert.alert(error.message);
       }
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return {
-    state: { isLoading, error },
+    state: { loading, error },
     actions: { takePhoto, uploadPhoto, deletePhotos, clear },
     photoUri,
   };

@@ -16,9 +16,9 @@ type HomeProps = NativeStackScreenProps<MainStackParamList, 'Home'>;
 const Home = (props: HomeProps) => {
   const { navigation } = props;
   const { theme } = useTheme();
-  const { isLoading, profiles } = useNearbyUsers(1000);
+  const { loading, profiles } = useNearbyUsers(1000);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size='large' color={theme.colors.primary} />

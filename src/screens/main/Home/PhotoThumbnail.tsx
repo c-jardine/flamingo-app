@@ -6,6 +6,9 @@ import { useDownloadPhoto } from '../../../hooks';
 import { ProfileProps } from '../../../types';
 import { Poppins } from '../../../utils';
 
+const METERS_TO_FEET = 3.281;
+const FEET_IN_MILES = 5280;
+
 interface PhotoThumbnailProps {
   path: string;
   profile: ProfileProps;
@@ -16,7 +19,7 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
   const { isDownloading, photoUri } = useDownloadPhoto(props.path);
 
   const formatDistance = (distance: number) => {
-    const dist = distance * 3.281;
+    const dist = distance * METERS_TO_FEET;
     if (dist < 20) {
       return 'a few feet away';
     } else if (dist < 50) {
@@ -30,7 +33,10 @@ const PhotoThumbnail = (props: PhotoThumbnailProps) => {
     } else if (dist < 5280) {
       return '< 1 mile away';
     } else {
-      return '> 1 mile away';
+      const miles = dist / FEET_IN_MILES;
+      return `${Intl.NumberFormat().format(Math.round(miles))} ${
+        miles === 1 ? 'mile' : 'miles'
+      } away`;
     }
   };
 

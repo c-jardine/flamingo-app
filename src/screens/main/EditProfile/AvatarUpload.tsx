@@ -102,8 +102,8 @@ const AvatarInput = (props: {
             containerStyle={{ flex: 1 }}
             title='Save'
             onPress={_handleUpload}
-            disabled={!photoUri || state.isLoading}
-            loading={state.isLoading}
+            disabled={!photoUri || state.loading}
+            loading={state.loading}
           />
         </View>
       </Dialog>

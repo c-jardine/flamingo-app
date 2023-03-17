@@ -4,13 +4,13 @@ import { supabase } from '../supabase';
 import { ProfileProps } from '../types';
 
 export const useProfile = (id: string) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [profile, setProfile] = React.useState<ProfileProps | null>(null);
 
   React.useEffect(() => {
     if (id) {
       try {
-        setIsLoading(true);
+        setLoading(true);
 
         (async () => {
           const { data, error } = await supabase
@@ -31,10 +31,10 @@ export const useProfile = (id: string) => {
           Alert.alert(error.message);
         }
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     }
   }, [id]);
 
-  return { isLoading, profile };
+  return { loading, profile };
 };

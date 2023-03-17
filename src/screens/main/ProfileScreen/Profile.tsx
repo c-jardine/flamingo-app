@@ -32,14 +32,14 @@ const TABS = [
 
 const Profile = (props: ProfileProps) => {
   const { theme } = useTheme();
-  const { isLoading, profile } = useProfile(props.route.params.id);
+  const { loading, profile } = useProfile(props.route.params.id);
   const { isDownloading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
   const [selectedTab, setSelectedTab] = React.useState<string>('personal');
 
   const disclosure = useDisclosure();
   const gallery = [{ uri: photoUri }];
 
-  if (isDownloading || !photoUri || isLoading || !profile) {
+  if (isDownloading || !photoUri || loading || !profile) {
     return <SplashScreen />;
   }
 
