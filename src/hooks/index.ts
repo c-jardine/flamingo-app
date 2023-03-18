@@ -1,3 +1,4 @@
+export * from './useChatMessages';
 export * from './useDisclosure';
 export * from './useDownloadPhoto';
 export * from './useLocation';
