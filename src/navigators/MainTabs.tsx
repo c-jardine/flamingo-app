@@ -1,9 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, useTheme } from '@rneui/themed';
-import { Home, Settings } from '../screens/main';
+import { Chat, Home, Settings } from '../screens/main';
 
 export type TabsParamList = {
   Home: undefined;
+  Chat: undefined;
   Settings: undefined;
 };
 
@@ -23,6 +24,19 @@ const MainTabs = () => {
             <Icon
               type='material-community'
               name='home'
+              color={focused ? theme.colors.primary : 'black'}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='Chat'
+        component={Chat}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              type='material-community'
+              name='message'
               color={focused ? theme.colors.primary : 'black'}
             />
           ),

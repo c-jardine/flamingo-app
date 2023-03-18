@@ -5,6 +5,7 @@ import { useSession } from '../hooks';
 import { Login } from '../screens/auth';
 import {
   About,
+  ChatRoom,
   FriendManagement,
   Notifications,
   PhotoManagement,
@@ -19,6 +20,7 @@ import MainTabs from './MainTabs';
 export type MainStackParamList = {
   Home: undefined;
   Tabs: undefined;
+  ChatRoom: { id: string };
   Profile: { id: string };
   EditProfileNavigator: undefined;
   Login: undefined;
@@ -42,6 +44,7 @@ const MainNavigator = () => {
         {session && session.user ? (
           <>
             <MainStack.Screen name='Tabs' component={MainTabs} />
+            <MainStack.Screen name='ChatRoom' component={ChatRoom} />
             <MainStack.Screen
               name='Profile'
               component={Profile}

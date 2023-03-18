@@ -1,10 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Text } from '@rneui/themed';
+import { Icon, Image, Text, useTheme } from '@rneui/themed';
 import { differenceInYears } from 'date-fns';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SplashScreen } from '../../../components/utils';
-import { useDisclosure, useDownloadPhoto, useProfile } from '../../../hooks';
+import {
+  useDisclosure,
+  useDownloadPhoto,
+  useProfile,
+  useSession,
+} from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { Poppins } from '../../../utils';
 import AmusementTabView from './AmusementTabView';
@@ -31,6 +36,8 @@ const TABS = [
 ];
 
 const Profile = (props: ProfileProps) => {
+  const { theme } = useTheme();
+  const { session } = useSession();
   const { loading, profile } = useProfile(props.route.params.id);
   const { loading: downloading, photoUri } = useDownloadPhoto(
     profile?.avatar_url!
@@ -48,12 +55,73 @@ const Profile = (props: ProfileProps) => {
     <ProfileLayout backgroundImg={photoUri}>
       <View
         style={{
-          paddingTop: 96,
+          paddingTop: 32,
           paddingBottom: 8,
         }}
       >
+        {profile.id !== session?.user.id && (
+          <View
+            style={{
+              paddingHorizontal: 16,
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              gap: 8,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                width: 56,
+                height: 56,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 32,
+                backgroundColor: 'rgba(248,46,75,0.25)',
+              }}
+            >
+              <Icon
+                type='material-community'
+                name='heart'
+                size={24}
+                color='rgba(248,46,75,0.5)'
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate('ChatRoom', { id: profile.id! })
+              }
+              style={{
+                width: 56,
+                height: 56,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 32,
+                backgroundColor: 'rgba(105,106,255,0.25)',
+              }}
+            >
+              <Icon
+                type='material-community'
+                name='message'
+                size={24}
+                color='rgba(105,106,255,0.5)'
+              />
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 4,
+                  right: 4,
+                  width: 8,
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: theme.colors.primary,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View
           style={{
+            marginTop: 32,
             flexDirection: 'row',
             gap: 20,
             paddingHorizontal: 16,
@@ -65,7 +133,7 @@ const Profile = (props: ProfileProps) => {
               style={{ aspectRatio: 1, width: 100, borderRadius: 50 }}
             />
           </TouchableOpacity>
-          <View style={{ flex: 1, marginTop: 32 }}>
+          <View style={{ flex: 1, marginTop: 28 }}>
             <Text
               style={{
                 fontSize: 30,
