@@ -9,7 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
-import { ProfileProvider } from './src/contexts';
+import { AuthProvider } from './src/contexts';
 import { MainNavigator } from './src/navigators';
 import { theme } from './src/theme/theme';
 
@@ -26,9 +26,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <ProfileProvider>
+      <AuthProvider>
         <MainNavigator />
-      </ProfileProvider>
+      </AuthProvider>
       <StatusBar style='dark' />
     </ThemeProvider>
   );

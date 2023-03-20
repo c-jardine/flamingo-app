@@ -1,7 +1,7 @@
 import { Dialog, Divider } from '@rneui/themed';
 import React from 'react';
 import { View } from 'react-native';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { Poppins } from '../../../utils';
 import DeletePhotoButton from './DeletePhotoButton';
 import SetAvatarButton from './SetAvatarButton';
@@ -14,7 +14,7 @@ interface AdminDialogProps {
 
 const AdminDialog = (props: AdminDialogProps) => {
   const { isOpen, onClose, path } = props;
-  const { profile } = React.useContext(ProfileContext);
+  const { profile } = React.useContext(AuthContext);
 
   return (
     <Dialog

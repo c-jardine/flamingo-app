@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Header } from '../../../components/core';
 import { Checkbox, KInput } from '../../../components/inputs';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { ProfileProps } from '../../../types';
 import { Poppins } from '../../../utils';
 import PersonalityTypeSelector from './PersonalityTypeSelector';
@@ -20,7 +20,7 @@ import { detailsFormSchema } from './profileFormSchema';
 
 const DetailsForm = () => {
   const { goBack } = useNavigation();
-  const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { profile, updateProfile } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
 
   const {

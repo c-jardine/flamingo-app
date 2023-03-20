@@ -2,7 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Image, Text } from '@rneui/themed';
 import { format } from 'date-fns';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { AuthContext } from '../../../contexts';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { ChatListItemProps } from '../../../types';
 import { Poppins } from '../../../utils';
@@ -12,6 +14,7 @@ interface ChatItemContentProps extends ChatListItemProps {
 }
 
 const ChatItemContent = (props: ChatItemContentProps) => {
+  const { session } = React.useContext(AuthContext);
   const { navigate } =
     useNavigation<NativeStackNavigationProp<MainStackParamList, 'ChatRoom'>>();
 
@@ -23,13 +26,12 @@ const ChatItemContent = (props: ChatItemContentProps) => {
         alignItems: 'center',
         padding: 16,
       }}
-      onPress={() => console.log(props)}
-      // onPress={() =>
-      //   navigate('ChatRoom', {
-      //     senderId: session?.user.id!,
-      //     receiverId: props.receiver_user_id!,
-      //   })
-      // }
+      onPress={() =>
+        navigate('ChatRoom', {
+          senderId: session?.user.id!,
+          receiverId: props.other_profile_id!,
+        })
+      }
     >
       <View
         style={{

@@ -6,7 +6,7 @@ export const useDownloadPhoto = (path: string) => {
   const [photoUri, setPhotoUri] = React.useState<string>('');
 
   React.useEffect(() => {
-    downloadPhoto();
+    path ? downloadPhoto() : setPhotoUri('https://i.imgur.com/9rUZBZ0.png');
   }, [path]);
 
   const downloadPhoto = async () => {
@@ -28,7 +28,6 @@ export const useDownloadPhoto = (path: string) => {
       };
     } catch (error) {
       if (error instanceof Error) {
-        setPhotoUri('https://i.imgur.com/9rUZBZ0.png');
       }
     } finally {
       setLoading(false);

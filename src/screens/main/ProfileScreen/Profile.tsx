@@ -4,12 +4,8 @@ import { differenceInYears } from 'date-fns';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SplashScreen } from '../../../components/utils';
-import {
-  useDisclosure,
-  useDownloadPhoto,
-  useProfile,
-  useSession,
-} from '../../../hooks';
+import { AuthContext } from '../../../contexts';
+import { useDisclosure, useDownloadPhoto, useProfile } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { Poppins } from '../../../utils';
 import AmusementTabView from './AmusementTabView';
@@ -37,7 +33,7 @@ const TABS = [
 
 const Profile = (props: ProfileProps) => {
   const { theme } = useTheme();
-  const { session } = useSession();
+  const { session } = React.useContext(AuthContext);
   const { loading, profile } = useProfile(props.route.params.id);
   const { loading: downloading, photoUri } = useDownloadPhoto(
     profile?.avatar_url!

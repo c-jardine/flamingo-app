@@ -13,16 +13,14 @@ import {
 } from 'react-native';
 import { Header } from '../../../components/core';
 import { DatePicker, KInput, ModalSelect } from '../../../components/inputs';
-import { ProfileContext } from '../../../contexts';
-import { useSession } from '../../../hooks';
+import { AuthContext } from '../../../contexts';
 import { ProfileProps } from '../../../types';
 import { Poppins } from '../../../utils';
 import { profileFormSchema } from './profileFormSchema';
 
 const ProfileForm = () => {
   const { goBack } = useNavigation();
-  const { profile, updateProfile } = React.useContext(ProfileContext);
-  const { session } = useSession();
+  const { session, profile, updateProfile } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
 
   const {

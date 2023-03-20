@@ -1,11 +1,11 @@
 import React from 'react';
 import { Alert } from 'react-native';
+import { AuthContext } from '../contexts';
 import { supabase } from '../supabase';
 import { ChatListItemProps, MessageProps } from '../types';
-import { useSession } from './useSession';
 
 export const useChats = () => {
-  const { session } = useSession();
+  const { session } = React.useContext(AuthContext);
   const [chats, setChats] = React.useState<ChatListItemProps[]>([]);
   const [loading, setLoading] = React.useState(false);
 

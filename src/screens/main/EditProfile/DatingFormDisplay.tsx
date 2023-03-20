@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { IconDetails } from '../../../components/core';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 
 const DatingFormDisplay = () => {
-  const { profile } = React.useContext(ProfileContext);
+  const { profile } = React.useContext(AuthContext);
 
   return (
     <View style={{ marginTop: 16, gap: 12 }}>

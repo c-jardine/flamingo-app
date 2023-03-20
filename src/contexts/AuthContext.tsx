@@ -1,26 +1,34 @@
+import { Session } from '@supabase/supabase-js';
 import React from 'react';
 import { Alert } from 'react-native';
-import { useSession } from '../hooks';
 import { supabase } from '../supabase';
 import { ProfileProps } from '../types';
 
-interface ProfileContextProps {
+interface AuthContextProps {
+  session: Session | null;
   profile: ProfileProps | null;
   updateProfile: (profileData: ProfileProps) => void;
 }
 
-export const ProfileContext = React.createContext<ProfileContextProps>({
+export const AuthContext = React.createContext<AuthContextProps>({
+  session: null,
   profile: null,
   updateProfile: (profileData: ProfileProps) => Promise<void>,
 });
 
-export const ProfileProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = React.useState<ProfileProps | null>(null);
-  const { session } = useSession();
+  const [session, setSession] = React.useState<Session | null>(null);
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   React.useEffect(() => {
     if (session) getProfile();
@@ -81,8 +89,8 @@ export const ProfileProvider = ({
   };
 
   return (
-    <ProfileContext.Provider value={{ profile, updateProfile }}>
+    <AuthContext.Provider value={{ session, profile, updateProfile }}>
       {children}
-    </ProfileContext.Provider>
+    </AuthContext.Provider>
   );
 };

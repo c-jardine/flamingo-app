@@ -1,11 +1,11 @@
 import * as Location from 'expo-location';
 import React from 'react';
 import { Alert } from 'react-native';
+import { AuthContext } from '../contexts';
 import { supabase } from '../supabase';
-import { useSession } from './useSession';
 
 export const useLocation = () => {
-  const { session } = useSession();
+  const { session } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   const [location, setLocation] =

@@ -2,13 +2,13 @@ import { Dialog, Image } from '@rneui/themed';
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { IconButton, PrimaryButton } from '../../../components/buttons';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { useDownloadPhoto, usePhotoManager } from '../../../hooks';
 import { ProfileProps } from '../../../types';
 import AvatarUploadLoader from './AvatarUploadLoader';
 
 const AvatarUpload = () => {
-  const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { profile, updateProfile } = React.useContext(AuthContext);
   const { loading, photoUri } = useDownloadPhoto(profile?.avatar_url!);
 
   return (

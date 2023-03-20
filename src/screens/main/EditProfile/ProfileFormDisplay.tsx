@@ -2,10 +2,10 @@ import { format, formatDistanceStrict } from 'date-fns';
 import React from 'react';
 import { View } from 'react-native';
 import { IconDetails } from '../../../components/core';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 
 const ProfileFormDisplay = () => {
-  const { profile } = React.useContext(ProfileContext);
+  const { profile } = React.useContext(AuthContext);
   const [genderIcon, setGenderIcon] = React.useState<string>('circle-outline');
 
   React.useEffect(() => {

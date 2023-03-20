@@ -1,12 +1,12 @@
 import React from 'react';
 import { Alert } from 'react-native';
+import { AuthContext } from '../contexts';
 import { supabase } from '../supabase';
 import { ProfileProps } from '../types';
 import { useLocation } from './useLocation';
-import { useSession } from './useSession';
 
 export const useNearbyUsers = (radius: number) => {
-  const { session } = useSession();
+  const { session } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState<boolean>(false);
   const { location } = useLocation();
   const [profiles, setProfiles] = React.useState<ProfileProps[]>([]);

@@ -1,6 +1,6 @@
 import React from 'react';
 import Animated, { BounceIn } from 'react-native-reanimated';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { useDisclosure, usePhotoManager } from '../../../hooks';
 import { MenuButton, PrimaryButton } from '../../buttons';
 
@@ -9,7 +9,7 @@ interface DeletePhotoButtonProps {
 }
 
 const DeletePhotoButton = (props: DeletePhotoButtonProps) => {
-  const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { profile, updateProfile } = React.useContext(AuthContext);
   const { actions } = usePhotoManager();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

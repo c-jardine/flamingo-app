@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { useSession } from '../hooks';
+import { AuthContext } from '../contexts';
 import { Login } from '../screens/auth';
 import {
   About,
@@ -36,7 +36,7 @@ export type MainStackParamList = {
 const MainStack = createNativeStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
-  const { session } = useSession();
+  const { session } = React.useContext(AuthContext);
 
   return (
     <NavigationContainer>

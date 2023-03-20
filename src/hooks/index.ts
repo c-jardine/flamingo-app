@@ -6,4 +6,3 @@ export * from './useNearbyUsers';
 export * from './usePhotoAlbum';
 export * from './usePhotoManager';
 export * from './useProfile';
-export * from './useSession';

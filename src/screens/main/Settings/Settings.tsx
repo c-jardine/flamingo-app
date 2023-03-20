@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { MenuButton, PrimaryButton } from '../../../components/buttons';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { useDownloadPhoto } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { TabsParamList } from '../../../navigators/MainTabs';
@@ -23,7 +23,7 @@ type SettingsProps = NativeStackScreenProps<
 const Settings = (props: SettingsProps) => {
   const { navigation } = props;
   const { theme } = useTheme();
-  const { profile } = React.useContext(ProfileContext);
+  const { profile } = React.useContext(AuthContext);
   const { photoUri } = useDownloadPhoto(profile?.avatar_url!);
 
   return (

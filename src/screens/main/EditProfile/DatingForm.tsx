@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import { Header } from '../../../components/core';
 import { KInput } from '../../../components/inputs';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { ProfileProps } from '../../../types';
 import { datingFormSchema } from './profileFormSchema';
 
 const DatingForm = () => {
   const { goBack } = useNavigation();
-  const { profile, updateProfile } = React.useContext(ProfileContext);
+  const { profile, updateProfile } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
 
   const {

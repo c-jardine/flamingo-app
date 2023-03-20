@@ -1,7 +1,7 @@
 import { Image, useTheme } from '@rneui/themed';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { ProfileContext } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { useDisclosure, useDownloadPhoto } from '../../../hooks';
 import AdminDialog from './AdminDialog';
 import ThumbnailLoading from './ThumbnailLoading';
@@ -13,7 +13,7 @@ interface PhotoThumbnailProps {
 const PhotoThumbnail = (props: PhotoThumbnailProps) => {
   const { theme } = useTheme();
   const { loading, photoUri } = useDownloadPhoto(props.path);
-  const { profile } = React.useContext(ProfileContext);
+  const { profile } = React.useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
