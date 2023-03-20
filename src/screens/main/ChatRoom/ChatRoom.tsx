@@ -1,146 +1,96 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Input, Text, useTheme } from '@rneui/themed';
-import React from 'react';
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-} from 'react-native';
-import { IconButton } from '../../../components/buttons';
-import { Header } from '../../../components/core';
-import { SplashScreen } from '../../../components/utils';
-import {
-  useChatMessages,
-  useDownloadPhoto,
-  useProfile,
-  useSession,
-} from '../../../hooks';
+import { Button, Text } from '@rneui/themed';
+import React, { useEffect, useState } from 'react';
+import { Alert, TextInput, View } from 'react-native';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
-import { format, isToday } from 'date-fns';
+import { supabase } from '../../../supabase';
 
 type ChatRoomProps = NativeStackScreenProps<MainStackParamList, 'ChatRoom'>;
 
 const ChatRoom = (props: ChatRoomProps) => {
-  const { theme } = useTheme();
-  const { session } = useSession();
-  const { loading, profile } = useProfile(props.route.params.id!);
-  const { loading: downloading, photoUri } = useDownloadPhoto(
-    profile?.avatar_url!
-  );
-  const { messages } = useChatMessages(session?.user.id!, profile?.id!);
+  const { senderId, receiverId } = props.route.params;
+  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  if (loading || downloading) {
-    return <SplashScreen />;
-  }
+  const conversationId = `${senderId}-${receiverId}`;
 
-  const MessageBubble = ({ message }) => {
-    return (
-      <View
-        style={{
-          alignItems:
-            message.user_id === profile?.id ? 'flex-start' : 'flex-end',
-        }}
-      >
-        <View
-          style={{
-            backgroundColor:
-              message.user_id === profile?.id ? 'white' : theme.colors.primary,
-            maxWidth: '75%',
-            padding: 16,
-            borderRadius: 16,
-          }}
-        >
-          <Text
-            style={{
-              color: message.user_id === profile?.id ? 'black' : 'white',
-            }}
-          >
-            {message.message}
-          </Text>
-        </View>
-        <Text style={{ marginTop: 6, color: 'rgba(0,0,0,0.25)' }}>
-          {isToday(new Date(message.created_at))
-            ? `${format(new Date(message.created_at), 'hh:mm a')}`
-            : `${format(new Date(message.created_at), 'MM/dd/yyyy | hh:mm a')}`}
-        </Text>
-      </View>
-    );
+  useEffect(() => {
+    setLoading(true);
+    // Subscribe to new messages in the conversation
+    const chatChannel = supabase.channel(`chat:${conversationId}`);
+    chatChannel.subscribe((payload) => {
+      console.log('BANANA', payload);
+      setMessages((prevState) => [...prevState, payload.new]);
+    });
+
+    // Load existing messages in the conversation
+    (async () => {
+      try {
+        const { data: messages, error } = await supabase.rpc('get_messages', {
+          sender_id: senderId,
+          receiver_id: receiverId,
+        });
+        if (error) {
+          throw new Error('Error loading messages');
+        }
+        setMessages(messages);
+      } catch (error) {
+        if (error instanceof Error) {
+          Alert.alert(error.message);
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      // Unsubscribe from the channel when component unmounts
+      chatChannel.unsubscribe();
+    };
+  }, []);
+
+  const sendMessage = async () => {
+    setLoading(true);
+    if (newMessage === '') return;
+    const { data, error } = await supabase.from('messages').insert([
+      {
+        conversation_id: conversationId,
+        user_id: senderId,
+        message: newMessage,
+      },
+    ]);
+    if (error) console.log('Error sending message:', error);
+    else setNewMessage('');
+    setLoading(false);
   };
 
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
-    <View
-      style={{
-        height: Dimensions.get('screen').height,
-      }}
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={Platform.OS === 'ios' && { flex: 1 }}
-      >
-        <View
-          style={{
-            backgroundColor: 'white',
-          }}
-        >
-          <Header title={profile?.first_name!} subtitle='Not online' />
-        </View>
-        {photoUri && (
-          <View style={{ position: 'absolute', top: 64, right: 16 }}>
-            <Image
-              source={{ uri: photoUri }}
-              style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
-            />
-          </View>
-        )}
-        <View style={{ flexGrow: 1 }}>
-          <ScrollView contentContainerStyle={{ padding: 16 }}>
-            <View style={{ gap: 32 }}>
-              {messages?.map((message) => (
-                <View
-                  style={{
-                    alignItems:
-                      message.user_id === profile?.id
-                        ? 'flex-start'
-                        : 'flex-end',
-                  }}
-                >
-                  <MessageBubble message={message} />
-                </View>
-              ))}
+    <View style={{ flex: 1 }}>
+      {messages && messages.map((m) => <Text>{m.user_id}</Text>)}
+      {/* {
+        messages && messages.map((msg) => <Text>{msg.message}</Text>)
+        <FlatList
+          data={messages}
+          keyExtractor={(item) => item.message_id}
+          renderItem={({ item }) => (
+            <View>
+              <Text>{item.message}</Text>
             </View>
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 8,
-            paddingTop: 24,
-            paddingBottom: 32,
-            paddingLeft: 8,
-            paddingRight: 16,
-            borderTopWidth: 1,
-            borderColor: 'rgba(0,0,0,0.1)',
-            backgroundColor: 'white',
-          }}
-        >
-          <Input
-            multiline
-            placeholder='Send a message'
-            containerStyle={{ flex: 1 }}
-          />
-          <View style={{ marginTop: -8 }}>
-            <IconButton
-              icon={{
-                type: 'material-community',
-                name: 'send',
-                color: theme.colors.primary,
-              }}
-            />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+          )}
+        />
+      } */}
+      <View>
+        <TextInput
+          value={newMessage}
+          onChangeText={(text) => setNewMessage(text)}
+        />
+        <Button title='Send' onPress={sendMessage} />
+      </View>
     </View>
   );
 };

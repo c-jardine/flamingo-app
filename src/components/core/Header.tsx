@@ -6,6 +6,7 @@ import { Poppins } from '../../utils';
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  noNav?: boolean;
 }
 
 const Header = (props: HeaderProps) => {
@@ -22,19 +23,21 @@ const Header = (props: HeaderProps) => {
         borderColor: 'rgba(0,0,0,0.1)',
       }}
     >
-      <TouchableOpacity
-        onPress={goBack}
-        style={{
-          position: 'absolute',
-          zIndex: 1,
-          top: 55,
-          left: 16,
-          padding: 8,
-          borderRadius: 32,
-        }}
-      >
-        <Icon type='ionicon' name='chevron-back-outline' />
-      </TouchableOpacity>
+      {!props.noNav && (
+        <TouchableOpacity
+          onPress={goBack}
+          style={{
+            position: 'absolute',
+            zIndex: 1,
+            top: 55,
+            left: 16,
+            padding: 8,
+            borderRadius: 32,
+          }}
+        >
+          <Icon type='ionicon' name='chevron-back-outline' />
+        </TouchableOpacity>
+      )}
       <Text
         style={{
           marginBottom: 0,

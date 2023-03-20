@@ -1,4 +1,4 @@
-export * from './useChatMessages';
+export * from './useChats';
 export * from './useDisclosure';
 export * from './useDownloadPhoto';
 export * from './useLocation';

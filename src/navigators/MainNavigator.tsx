@@ -20,7 +20,7 @@ import MainTabs from './MainTabs';
 export type MainStackParamList = {
   Home: undefined;
   Tabs: undefined;
-  ChatRoom: { id: string };
+  ChatRoom: { senderId: string; receiverId: string };
   Profile: { id: string };
   EditProfileNavigator: undefined;
   Login: undefined;

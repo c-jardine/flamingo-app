@@ -88,7 +88,10 @@ const Profile = (props: ProfileProps) => {
 
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('ChatRoom', { id: profile.id! })
+                props.navigation.navigate('ChatRoom', {
+                  senderId: session?.user.id!,
+                  receiverId: profile.id!,
+                })
               }
               style={{
                 width: 56,
