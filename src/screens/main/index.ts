@@ -1,4 +1,4 @@
-export * from './Chat';
+export * from './ChatList';
 export * from './ChatRoom';
 export * from './EditProfile';
 export * from './Home';

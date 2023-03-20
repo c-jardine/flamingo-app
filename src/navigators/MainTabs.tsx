@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, useTheme } from '@rneui/themed';
-import { Chat, Home, Settings } from '../screens/main';
+import { ChatList, Home, Settings } from '../screens/main';
 
 export type TabsParamList = {
   Home: undefined;
-  Chat: undefined;
+  ChatList: undefined;
   Settings: undefined;
 };
 
@@ -30,8 +30,8 @@ const MainTabs = () => {
         }}
       />
       <Tabs.Screen
-        name='Chat'
-        component={Chat}
+        name='ChatList'
+        component={ChatList}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon

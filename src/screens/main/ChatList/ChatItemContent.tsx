@@ -2,20 +2,18 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Image, Text } from '@rneui/themed';
 import { format } from 'date-fns';
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
-import { ChatItemProps, useDownloadPhoto, useSession } from '../../../hooks';
+import { TouchableOpacity, View } from 'react-native';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
+import { ChatListItemProps } from '../../../types';
 import { Poppins } from '../../../utils';
 
-const ChatDisplay = (props: ChatItemProps) => {
-  const { session } = useSession();
+interface ChatItemContentProps extends ChatListItemProps {
+  photoUri: string;
+}
+
+const ChatItemContent = (props: ChatItemContentProps) => {
   const { navigate } =
     useNavigation<NativeStackNavigationProp<MainStackParamList, 'ChatRoom'>>();
-  const { loading, photoUri } = useDownloadPhoto(props.other_avatar_url);
-
-  if (loading) {
-    return <ActivityIndicator />;
-  }
 
   return (
     <TouchableOpacity
@@ -25,6 +23,7 @@ const ChatDisplay = (props: ChatItemProps) => {
         alignItems: 'center',
         padding: 16,
       }}
+      onPress={() => console.log(props)}
       // onPress={() =>
       //   navigate('ChatRoom', {
       //     senderId: session?.user.id!,
@@ -40,12 +39,10 @@ const ChatDisplay = (props: ChatItemProps) => {
           overflow: 'hidden',
         }}
       >
-        {photoUri && (
-          <Image
-            source={{ uri: photoUri }}
-            style={{ width: '100%', height: '100%' }}
-          />
-        )}
+        <Image
+          source={{ uri: props.photoUri }}
+          style={{ width: '100%', height: '100%' }}
+        />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 18 }}>
@@ -73,4 +70,4 @@ const ChatDisplay = (props: ChatItemProps) => {
     </TouchableOpacity>
   );
 };
-export default ChatDisplay;
+export default ChatItemContent;
