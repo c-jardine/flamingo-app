@@ -12,54 +12,33 @@ export const useChats = () => {
   React.useEffect(() => {
     const channel = supabase.channel(`messages_channel:${session?.user.id!}`);
 
+    // Fetch the initial chat list
     if (session) {
-      // Fetch the initial chat list
-      (async () => {
-        try {
-          setLoading(true);
-          const { data: chats, error } = await supabase.rpc('get_chats', {
-            profile_id: session?.user.id!,
-          });
+      getChats();
 
-          if (error) {
-            throw new Error(`Error fetching chats: ${error.message}`);
+      // Subscribe to the messages channel
+      channel
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'messages',
+          },
+          (payload: { new: MessageProps }) => {
+            // Update the chat list when a new chat is created
+            const conversationIndex = chats.findIndex(
+              (chat: ChatListItemProps) =>
+                chat.id === payload.new.conversation_id
+            );
+            const updatedChats = [...chats];
+            updatedChats[conversationIndex].latest_message = payload.new.text;
+            updatedChats[conversationIndex].latest_message_time =
+              payload.new.created_at;
+            setChats(updatedChats);
           }
-
-          setChats(chats);
-
-          // Subscribe to the messages channel
-          channel
-            .on(
-              'postgres_changes',
-              {
-                event: 'INSERT',
-                schema: 'public',
-                table: 'messages',
-              },
-              (payload: { new: MessageProps }) => {
-                console.log('CREATED', payload);
-                // Update the chat list when a new chat is created
-                const conversationIndex = chats.findIndex(
-                  (chat: ChatListItemProps) =>
-                    chat.id === payload.new.conversation_id
-                );
-                const updatedChats = [...chats];
-                updatedChats[conversationIndex].latest_message =
-                  payload.new.text;
-                updatedChats[conversationIndex].latest_message_time =
-                  payload.new.created_at;
-                setChats(updatedChats);
-              }
-            )
-            .subscribe();
-        } catch (error) {
-          if (error instanceof Error) {
-            Alert.alert(error.message);
-          }
-        } finally {
-          setLoading(false);
-        }
-      })();
+        )
+        .subscribe();
     }
 
     // Unsubscribe from the chat channel when the component unmounts
@@ -67,6 +46,27 @@ export const useChats = () => {
       channel.unsubscribe();
     };
   }, [session]);
+
+  const getChats = async () => {
+    try {
+      setLoading(true);
+      const { data: chats, error } = await supabase.rpc('get_chats', {
+        profile_id: session?.user.id!,
+      });
+
+      if (error) {
+        throw new Error(`Error fetching chats: ${error.message}`);
+      }
+
+      setChats(chats);
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return { chats, loading };
 };
