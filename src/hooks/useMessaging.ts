@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Alert } from 'react-native';
 import { supabase } from '../supabase';
 
@@ -11,12 +11,14 @@ export interface MessageProps {
   recipient_id: string;
   body: string;
   read: boolean;
-  typing: boolean;
 }
 
 // Custom hook to listen for changes to messages in a conversation
 export const useMessaging = (senderId: string, recipientId: string) => {
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = React.useState<MessageProps[]>([]);
+  const [conversationId, setConversationId] = React.useState<string | null>(
+    null
+  );
 
   React.useEffect(() => {
     if (senderId && recipientId) {
@@ -42,6 +44,7 @@ export const useMessaging = (senderId: string, recipientId: string) => {
           }
         )
         .on(
+          //@ts-ignore
           'postgres_changes',
           {
             event: 'DELETE',
@@ -73,11 +76,12 @@ export const useMessaging = (senderId: string, recipientId: string) => {
           user2_id: user2Id,
         });
 
-        setMessages(data);
-
         if (error) {
           throw new Error(`Error getting messages: ${error.message}`);
         }
+
+        setMessages(data);
+        setConversationId(data[0].conversation_id);
       } catch (error) {
         if (error instanceof Error) {
           Alert.alert(error.message);
@@ -112,5 +116,5 @@ export const useMessaging = (senderId: string, recipientId: string) => {
     }
   };
 
-  return { messages, createMessage };
+  return { conversationId, messages, createMessage };
 };

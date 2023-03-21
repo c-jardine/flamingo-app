@@ -1,6 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Input, Text, useTheme } from '@rneui/themed';
-import { format, isToday } from 'date-fns';
+import { Image, Input, useTheme } from '@rneui/themed';
 import React from 'react';
 import {
   Dimensions,
@@ -21,8 +20,10 @@ import {
   useDownloadPhoto,
   useMessaging,
   useProfile,
+  useTyping,
 } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
+import ChatRoomItem from './ChatRoomItem';
 
 type ChatRoomProps = NativeStackScreenProps<MainStackParamList, 'ChatRoom'>;
 
@@ -33,7 +34,7 @@ const ChatRoom = (props: ChatRoomProps) => {
   const { loading: downloading, photoUri } = useDownloadPhoto(
     profile?.avatar_url!
   );
-  const { messages, createMessage } = useMessaging(
+  const { conversationId, messages, createMessage } = useMessaging(
     session?.user.id!,
     profile?.id!
   );
@@ -42,6 +43,12 @@ const ChatRoom = (props: ChatRoomProps) => {
 
   const [inputFocused, setInputFocused] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<string>('');
+  const { isTyping, onTyping } = useTyping(
+    session?.user.id!,
+    profile?.id!,
+    conversationId!,
+    message
+  );
 
   const flatListRef = React.useRef<FlatList>(null);
 
@@ -73,43 +80,10 @@ const ChatRoom = (props: ChatRoomProps) => {
     return <SplashScreen />;
   }
 
-  const MessageBubble = (props: MessageProps) => {
-    return (
-      <View
-        style={{
-          alignItems:
-            props.sender_id === profile?.id ? 'flex-start' : 'flex-end',
-        }}
-      >
-        <View
-          style={{
-            backgroundColor:
-              props.sender_id === profile?.id ? 'white' : theme.colors.primary,
-            maxWidth: '75%',
-            padding: 16,
-            borderRadius: 16,
-          }}
-        >
-          <Text
-            style={{
-              color: props.sender_id === profile?.id ? 'black' : 'white',
-            }}
-          >
-            {props.body}
-          </Text>
-        </View>
-        <Text style={{ marginTop: 6, color: 'rgba(0,0,0,0.25)', fontSize: 12 }}>
-          {isToday(new Date(props.created_at))
-            ? `${format(new Date(props.created_at), 'hh:mm a')}`
-            : `${format(new Date(props.created_at), 'MM/dd/yyyy | hh:mm a')}`}
-        </Text>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView
       style={{
+        flex: 1,
         height: Dimensions.get('screen').height,
         backgroundColor: 'white',
       }}
@@ -118,10 +92,13 @@ const ChatRoom = (props: ChatRoomProps) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={Platform.OS === 'ios' && { flex: 1 }}
       >
-        <View style={{ marginTop: -64 }}>
-          <Header title={profile?.first_name!} subtitle='Not online' />
+        <View style={{ marginTop: -48 }}>
+          <Header
+            title={profile?.first_name!}
+            subtitle={isTyping ? 'Typing...' : 'Offline'}
+          />
           {photoUri && (
-            <View style={{ position: 'absolute', top: 64, right: 16 }}>
+            <View style={{ position: 'absolute', top: 62, right: 16 }}>
               <Image
                 source={{ uri: photoUri }}
                 style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
@@ -130,19 +107,26 @@ const ChatRoom = (props: ChatRoomProps) => {
           )}
         </View>
         {messages && (
-          <FlatList
-            ref={flatListRef}
-            data={messages}
-            keyExtractor={(item: MessageProps) => item.id}
-            renderItem={({ item }: { item: MessageProps }) => (
-              <MessageBubble {...item} />
-            )}
-            style={{ backgroundColor: 'rgba(0,0,0,0.035)' }}
-            contentContainerStyle={{ padding: 16, gap: 16 }}
-            onContentSizeChange={_handleScrollToBottom}
-            onLayout={_handleScrollToBottom}
-            onScroll={_handleScrollPos}
-          />
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.035)',
+            }}
+          >
+            <FlatList
+              ref={flatListRef}
+              data={messages}
+              keyExtractor={(item: MessageProps) => item.id}
+              renderItem={({ item }: { item: MessageProps }) => (
+                <ChatRoomItem {...item} profile={profile!} />
+              )}
+              ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
+              contentContainerStyle={{ padding: 16 }}
+              onContentSizeChange={_handleScrollToBottom}
+              onLayout={_handleScrollToBottom}
+              onScroll={_handleScrollPos}
+            />
+          </View>
         )}
         <View
           style={{
@@ -160,7 +144,10 @@ const ChatRoom = (props: ChatRoomProps) => {
             placeholder='Send a message'
             containerStyle={{ flex: 1 }}
             value={message}
-            onChangeText={(e) => setMessage(e)}
+            onChangeText={(e) => {
+              setMessage(e);
+              onTyping();
+            }}
             onSubmitEditing={() => _handleSend(message)}
             onFocus={_handleFocus}
             onBlur={_handleFocus}
