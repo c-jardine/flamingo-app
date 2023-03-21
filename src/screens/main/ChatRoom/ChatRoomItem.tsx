@@ -2,8 +2,7 @@ import { Text, useTheme } from '@rneui/themed';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { MessageProps } from '../../../hooks';
-import { ProfileProps } from '../../../types';
+import { MessageProps, ProfileProps } from '../../../types';
 import { formatDate } from '../../../utils';
 
 const ChatRoomItem = (props: MessageProps & { profile: ProfileProps }) => {

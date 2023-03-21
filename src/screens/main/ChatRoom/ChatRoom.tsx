@@ -1,60 +1,52 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Input, useTheme } from '@rneui/themed';
+import { Input, useTheme } from '@rneui/themed';
 import React from 'react';
-import {
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  View,
-} from 'react-native';
+import { Dimensions, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from '../../../components/buttons';
-import { Header } from '../../../components/core';
 import { SplashScreen } from '../../../components/utils';
 import { AuthContext } from '../../../contexts';
-import {
-  MessageProps,
-  useDownloadPhoto,
-  useMessaging,
-  useProfile,
-  useScrollPos,
-  useTyping,
-} from '../../../hooks';
+import { useMessaging, useProfile, useTyping } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
-import ChatRoomItem from './ChatRoomItem';
+import ChatRoomHeader from './ChatRoomHeader';
+import ChatRoomScroller from './ChatRoomScroller';
 
 type ChatRoomProps = NativeStackScreenProps<MainStackParamList, 'ChatRoom'>;
 
 const ChatRoom = (props: ChatRoomProps) => {
   const { theme } = useTheme();
-  const { session } = React.useContext(AuthContext);
+
+  // Authenticated user is the sender.
+  const { session: sender } = React.useContext(AuthContext);
+
+  // Get the recipient's profile.
   const { loading, profile } = useProfile(props.route.params.receiverId!);
-  const { loading: downloading, photoUri } = useDownloadPhoto(
-    profile?.avatar_url!
-  );
+
+  // Get the conversation's messages.
   const { conversationId, messages, createMessage } = useMessaging(
-    session?.user.id!,
+    sender?.user.id!,
     profile?.id!
   );
 
+  // Input state.
+  // TODO: Replace with react-hook-form.
   const [message, setMessage] = React.useState<string>('');
+
+  // Get typing status and handler.
   const { isTyping, onTyping } = useTyping(
-    session?.user.id!,
+    sender?.user.id!,
     profile?.id!,
     conversationId!,
     message
   );
 
-  const flatListRef = React.useRef<FlatList>(null);
-  const { scrollToBottom, handleScroll } = useScrollPos(flatListRef);
-
+  // Input submission handler.
   const _handleSend = (message: string) => {
     createMessage(message);
     setMessage('');
   };
 
-  if (loading || downloading) {
+  if (loading) {
     return <SplashScreen />;
   }
 
@@ -70,43 +62,13 @@ const ChatRoom = (props: ChatRoomProps) => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <View>
-          <Header
-            title={profile?.first_name!}
-            subtitle={isTyping ? 'Typing...' : 'Offline'}
-          />
-          {photoUri && (
-            <View
-              style={{
-                position: 'absolute',
-                height: '100%',
-                justifyContent: 'center',
-                right: 16,
-              }}
-            >
-              <Image
-                source={{ uri: photoUri }}
-                style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
-              />
-            </View>
-          )}
-        </View>
-        {messages.length > 0 && (
-          <FlatList
-            ref={flatListRef}
-            data={messages}
-            keyExtractor={(item: MessageProps) => item.message_id}
-            renderItem={({ item }: { item: MessageProps }) => (
-              <ChatRoomItem {...item} profile={profile!} />
-            )}
-            ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
-            style={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
-            contentContainerStyle={{ padding: 16 }}
-            onContentSizeChange={scrollToBottom}
-            onLayout={scrollToBottom}
-            onScroll={handleScroll}
-          />
-        )}
+        {/* Header bar */}
+        <ChatRoomHeader profile={profile!} isTyping={isTyping} />
+
+        {/* Message content */}
+        <ChatRoomScroller messages={messages} profile={profile!} />
+
+        {/* Input bar */}
         <View
           style={{
             flexDirection: 'row',

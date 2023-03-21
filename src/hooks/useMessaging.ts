@@ -1,17 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-native';
 import { supabase } from '../supabase';
-
-export interface MessageProps {
-  message_id: string;
-  conversation_id: string;
-  created_at: string;
-  updated_at: string;
-  sender_id: string;
-  recipient_id: string;
-  body: string;
-  read: boolean;
-}
+import { MessageProps } from '../types';
 
 // Custom hook to listen for changes to messages in a conversation
 export const useMessaging = (senderId: string, recipientId: string) => {
@@ -28,6 +18,10 @@ export const useMessaging = (senderId: string, recipientId: string) => {
       // Subscribe to message events.
       const channel = supabase
         .channel(`messages:${senderId}/${recipientId}`)
+        // Update messages array when new messages are inserted into the
+        // database.
+        // TODO: Make sure this doesn't trigger unless the message is received
+        // TODO: in the relevant conversation.
         .on(
           'postgres_changes',
           {
@@ -44,6 +38,8 @@ export const useMessaging = (senderId: string, recipientId: string) => {
           }
         )
         .on(
+          // Update the messages array when new messages are deleted from the
+          // database.
           //@ts-ignore
           'postgres_changes',
           {
@@ -62,15 +58,19 @@ export const useMessaging = (senderId: string, recipientId: string) => {
         )
         .subscribe();
 
+      // Cleanup.
       return () => {
         channel.unsubscribe();
       };
     }
   }, [senderId, recipientId]);
 
+  // Get all messages between two users.
+  // TODO: This should eventually be paginated.
   const getMessages = async (user1Id: string, user2Id: string) => {
     if (user1Id && user2Id) {
       try {
+        // Get the messages from the database.
         const { data, error } = await supabase.rpc('chat_get_messages', {
           user1_id: user1Id,
           user2_id: user2Id,
@@ -90,15 +90,19 @@ export const useMessaging = (senderId: string, recipientId: string) => {
     }
   };
 
+  // Create a new message.
   const createMessage = async (message: string) => {
     if (senderId && recipientId) {
       try {
+        // Trim empty spaces.
         const formattedMessage = message.trim();
 
+        // The message shouldn't be empty.
         if (!formattedMessage || formattedMessage === '') {
           return;
         }
 
+        // Create the message in the database.
         const { error } = await supabase.rpc('chat_create_message', {
           sender_id: senderId,
           recipient_id: recipientId,

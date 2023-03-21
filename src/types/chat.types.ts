@@ -5,11 +5,14 @@ export interface ConversationProps {
   user2_id: string;
 }
 export interface MessageProps {
-  id: string;
-  created_at: string;
+  message_id: string;
   conversation_id: string;
+  created_at: string;
+  updated_at: string;
   sender_id: string;
-  text: string;
+  recipient_id: string;
+  body: string;
+  read: boolean;
 }
 
 export type ChatListItemProps = {
