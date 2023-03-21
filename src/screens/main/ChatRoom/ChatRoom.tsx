@@ -5,8 +5,6 @@ import {
   Dimensions,
   FlatList,
   KeyboardAvoidingView,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   Platform,
   View,
 } from 'react-native';
@@ -20,6 +18,7 @@ import {
   useDownloadPhoto,
   useMessaging,
   useProfile,
+  useScrollPos,
   useTyping,
 } from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
@@ -39,9 +38,6 @@ const ChatRoom = (props: ChatRoomProps) => {
     profile?.id!
   );
 
-  const [isNearBottom, setIsNearBottom] = React.useState<boolean>(true);
-
-  const [inputFocused, setInputFocused] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<string>('');
   const { isTyping, onTyping } = useTyping(
     session?.user.id!,
@@ -51,29 +47,11 @@ const ChatRoom = (props: ChatRoomProps) => {
   );
 
   const flatListRef = React.useRef<FlatList>(null);
-
-  const _handleFocus = () => {
-    setInputFocused(!inputFocused);
-  };
+  const { scrollToBottom, handleScroll } = useScrollPos(flatListRef);
 
   const _handleSend = (message: string) => {
     createMessage(message);
     setMessage('');
-  };
-
-  const _handleScrollToBottom = () => {
-    messages.length &&
-      isNearBottom &&
-      flatListRef.current?.scrollToEnd({ animated: false });
-  };
-
-  const _handleScrollPos = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    messages.length &&
-      setIsNearBottom(
-        e.nativeEvent.layoutMeasurement.height +
-          e.nativeEvent.contentOffset.y >=
-          e.nativeEvent.contentSize.height - 20
-      );
   };
 
   if (loading || downloading) {
@@ -113,7 +91,7 @@ const ChatRoom = (props: ChatRoomProps) => {
             </View>
           )}
         </View>
-        {messages && (
+        {messages.length > 0 && (
           <FlatList
             ref={flatListRef}
             data={messages}
@@ -124,9 +102,9 @@ const ChatRoom = (props: ChatRoomProps) => {
             ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
             style={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
             contentContainerStyle={{ padding: 16 }}
-            onContentSizeChange={_handleScrollToBottom}
-            onLayout={_handleScrollToBottom}
-            onScroll={_handleScrollPos}
+            onContentSizeChange={scrollToBottom}
+            onLayout={scrollToBottom}
+            onScroll={handleScroll}
           />
         )}
         <View
@@ -150,8 +128,6 @@ const ChatRoom = (props: ChatRoomProps) => {
               onTyping();
             }}
             onSubmitEditing={() => _handleSend(message)}
-            onFocus={_handleFocus}
-            onBlur={_handleFocus}
           />
           <View style={{ marginTop: -8 }}>
             <IconButton
