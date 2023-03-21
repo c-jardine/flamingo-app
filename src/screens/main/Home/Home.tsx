@@ -16,7 +16,7 @@ type HomeProps = NativeStackScreenProps<MainStackParamList, 'Home'>;
 const Home = (props: HomeProps) => {
   const { navigation } = props;
   const { theme } = useTheme();
-  const { loading, profiles } = useNearbyUsers(1000);
+  const { loading, profiles } = useNearbyUsers(10000000);
 
   if (loading) {
     return (
@@ -27,7 +27,7 @@ const Home = (props: HomeProps) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
       {profiles?.map((profile) => (
         <TouchableOpacity
           key={profile.id}

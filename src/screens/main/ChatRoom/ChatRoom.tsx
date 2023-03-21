@@ -13,7 +13,12 @@ import { IconButton } from '../../../components/buttons';
 import { Header } from '../../../components/core';
 import { SplashScreen } from '../../../components/utils';
 import { AuthContext } from '../../../contexts';
-import { useDownloadPhoto, useProfile } from '../../../hooks';
+import {
+  MessageProps,
+  useDownloadPhoto,
+  useMessaging,
+  useProfile,
+} from '../../../hooks';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 
 type ChatRoomProps = NativeStackScreenProps<MainStackParamList, 'ChatRoom'>;
@@ -25,24 +30,43 @@ const ChatRoom = (props: ChatRoomProps) => {
   const { loading: downloading, photoUri } = useDownloadPhoto(
     profile?.avatar_url!
   );
-  // const { messages } = useChatMessages(session?.user.id!, profile?.id!);
+  const { messages, createMessage } = useMessaging(
+    session?.user.id!,
+    profile?.id!
+  );
+
+  const [inputFocused, setInputFocused] = React.useState<boolean>(false);
+  const [message, setMessage] = React.useState<string>('');
+
+  const scrollViewRef = React.useRef<ScrollView>();
+
+  const _handleFocus = () => {
+    setInputFocused(!inputFocused);
+  };
+
+  const _handleSend = (message: string) => {
+    createMessage(message);
+    setMessage('');
+  };
 
   if (loading || downloading) {
     return <SplashScreen />;
   }
 
-  const MessageBubble = ({ message }) => {
+  const MessageBubble = ({ message }: { message: MessageProps }) => {
     return (
       <View
         style={{
           alignItems:
-            message.user_id === profile?.id ? 'flex-start' : 'flex-end',
+            message.sender_id === profile?.id ? 'flex-start' : 'flex-end',
         }}
       >
         <View
           style={{
             backgroundColor:
-              message.user_id === profile?.id ? 'white' : theme.colors.primary,
+              message.sender_id === profile?.id
+                ? 'white'
+                : theme.colors.primary,
             maxWidth: '75%',
             padding: 16,
             borderRadius: 16,
@@ -50,13 +74,13 @@ const ChatRoom = (props: ChatRoomProps) => {
         >
           <Text
             style={{
-              color: message.user_id === profile?.id ? 'black' : 'white',
+              color: message.sender_id === profile?.id ? 'black' : 'white',
             }}
           >
-            {message.message}
+            {message.body}
           </Text>
         </View>
-        <Text style={{ marginTop: 6, color: 'rgba(0,0,0,0.25)' }}>
+        <Text style={{ marginTop: 6, color: 'rgba(0,0,0,0.25)', fontSize: 12 }}>
           {isToday(new Date(message.created_at))
             ? `${format(new Date(message.created_at), 'hh:mm a')}`
             : `${format(new Date(message.created_at), 'MM/dd/yyyy | hh:mm a')}`}
@@ -90,22 +114,35 @@ const ChatRoom = (props: ChatRoomProps) => {
             />
           </View>
         )}
-        <View style={{ flexGrow: 1 }}>
-          <ScrollView contentContainerStyle={{ padding: 16 }}>
-            {/* <View style={{ gap: 32 }}>
-              {messages?.map((message) => (
-                <View
-                  style={{
-                    alignItems:
-                      message.user_id === profile?.id
-                        ? 'flex-start'
-                        : 'flex-end',
-                  }}
-                >
-                  <MessageBubble message={message} />
-                </View>
-              ))}
-            </View> */}
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={{ padding: 16 }}
+            ref={scrollViewRef}
+            onContentSizeChange={() =>
+              // Should first check the scroll position. If it's not at the bottom,
+              // it shouldn't scroll. This allows prevents scrolling to the bottom
+              // when new messages are received if the user is scrolling through the
+              // conversation.
+              scrollViewRef?.current?.scrollToEnd({ animated: false })
+            }
+          >
+            {messages && (
+              <View style={{ flex: 1, gap: 16 }}>
+                {messages.map((message) => (
+                  <View
+                    key={message.id}
+                    style={{
+                      alignItems:
+                        message.sender_id === profile?.id
+                          ? 'flex-start'
+                          : 'flex-end',
+                    }}
+                  >
+                    <MessageBubble message={message} />
+                  </View>
+                ))}
+              </View>
+            )}
           </ScrollView>
         </View>
         <View
@@ -113,7 +150,7 @@ const ChatRoom = (props: ChatRoomProps) => {
             flexDirection: 'row',
             gap: 8,
             paddingTop: 24,
-            paddingBottom: 32,
+            paddingBottom: inputFocused ? 16 : 32,
             paddingLeft: 8,
             paddingRight: 16,
             borderTopWidth: 1,
@@ -122,9 +159,13 @@ const ChatRoom = (props: ChatRoomProps) => {
           }}
         >
           <Input
-            multiline
             placeholder='Send a message'
             containerStyle={{ flex: 1 }}
+            value={message}
+            onChangeText={(e) => setMessage(e)}
+            onSubmitEditing={() => _handleSend(message)}
+            onFocus={_handleFocus}
+            onBlur={_handleFocus}
           />
           <View style={{ marginTop: -8 }}>
             <IconButton
@@ -133,6 +174,7 @@ const ChatRoom = (props: ChatRoomProps) => {
                 name: 'send',
                 color: theme.colors.primary,
               }}
+              onPress={() => _handleSend(message)}
             />
           </View>
         </View>

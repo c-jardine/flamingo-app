@@ -1,3 +1,9 @@
+export interface ConversationProps {
+  id: string;
+  created_at: string;
+  user1_id: string;
+  user2_id: string;
+}
 export interface MessageProps {
   id: string;
   created_at: string;
