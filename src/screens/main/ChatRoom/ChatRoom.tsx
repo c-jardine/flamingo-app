@@ -4,11 +4,14 @@ import { format, isToday } from 'date-fns';
 import React from 'react';
 import {
   Dimensions,
+  FlatList,
   KeyboardAvoidingView,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Platform,
-  ScrollView,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from '../../../components/buttons';
 import { Header } from '../../../components/core';
 import { SplashScreen } from '../../../components/utils';
@@ -35,10 +38,12 @@ const ChatRoom = (props: ChatRoomProps) => {
     profile?.id!
   );
 
+  const [isNearBottom, setIsNearBottom] = React.useState<boolean>(true);
+
   const [inputFocused, setInputFocused] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<string>('');
 
-  const scrollViewRef = React.useRef<ScrollView>();
+  const flatListRef = React.useRef<FlatList>(null);
 
   const _handleFocus = () => {
     setInputFocused(!inputFocused);
@@ -49,24 +54,37 @@ const ChatRoom = (props: ChatRoomProps) => {
     setMessage('');
   };
 
+  const _handleScrollToBottom = () => {
+    messages.length &&
+      isNearBottom &&
+      flatListRef.current?.scrollToEnd({ animated: false });
+  };
+
+  const _handleScrollPos = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    messages.length &&
+      setIsNearBottom(
+        e.nativeEvent.layoutMeasurement.height +
+          e.nativeEvent.contentOffset.y >=
+          e.nativeEvent.contentSize.height - 20
+      );
+  };
+
   if (loading || downloading) {
     return <SplashScreen />;
   }
 
-  const MessageBubble = ({ message }: { message: MessageProps }) => {
+  const MessageBubble = (props: MessageProps) => {
     return (
       <View
         style={{
           alignItems:
-            message.sender_id === profile?.id ? 'flex-start' : 'flex-end',
+            props.sender_id === profile?.id ? 'flex-start' : 'flex-end',
         }}
       >
         <View
           style={{
             backgroundColor:
-              message.sender_id === profile?.id
-                ? 'white'
-                : theme.colors.primary,
+              props.sender_id === profile?.id ? 'white' : theme.colors.primary,
             maxWidth: '75%',
             padding: 16,
             borderRadius: 16,
@@ -74,83 +92,63 @@ const ChatRoom = (props: ChatRoomProps) => {
         >
           <Text
             style={{
-              color: message.sender_id === profile?.id ? 'black' : 'white',
+              color: props.sender_id === profile?.id ? 'black' : 'white',
             }}
           >
-            {message.body}
+            {props.body}
           </Text>
         </View>
         <Text style={{ marginTop: 6, color: 'rgba(0,0,0,0.25)', fontSize: 12 }}>
-          {isToday(new Date(message.created_at))
-            ? `${format(new Date(message.created_at), 'hh:mm a')}`
-            : `${format(new Date(message.created_at), 'MM/dd/yyyy | hh:mm a')}`}
+          {isToday(new Date(props.created_at))
+            ? `${format(new Date(props.created_at), 'hh:mm a')}`
+            : `${format(new Date(props.created_at), 'MM/dd/yyyy | hh:mm a')}`}
         </Text>
       </View>
     );
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         height: Dimensions.get('screen').height,
+        backgroundColor: 'white',
       }}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={Platform.OS === 'ios' && { flex: 1 }}
       >
-        <View
-          style={{
-            backgroundColor: 'white',
-          }}
-        >
+        <View style={{ marginTop: -64 }}>
           <Header title={profile?.first_name!} subtitle='Not online' />
+          {photoUri && (
+            <View style={{ position: 'absolute', top: 64, right: 16 }}>
+              <Image
+                source={{ uri: photoUri }}
+                style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
+              />
+            </View>
+          )}
         </View>
-        {photoUri && (
-          <View style={{ position: 'absolute', top: 64, right: 16 }}>
-            <Image
-              source={{ uri: photoUri }}
-              style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
-            />
-          </View>
-        )}
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            contentContainerStyle={{ padding: 16 }}
-            ref={scrollViewRef}
-            onContentSizeChange={() =>
-              // Should first check the scroll position. If it's not at the bottom,
-              // it shouldn't scroll. This allows prevents scrolling to the bottom
-              // when new messages are received if the user is scrolling through the
-              // conversation.
-              scrollViewRef?.current?.scrollToEnd({ animated: false })
-            }
-          >
-            {messages && (
-              <View style={{ flex: 1, gap: 16 }}>
-                {messages.map((message) => (
-                  <View
-                    key={message.id}
-                    style={{
-                      alignItems:
-                        message.sender_id === profile?.id
-                          ? 'flex-start'
-                          : 'flex-end',
-                    }}
-                  >
-                    <MessageBubble message={message} />
-                  </View>
-                ))}
-              </View>
+        {messages && (
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(item: MessageProps) => item.id}
+            renderItem={({ item }: { item: MessageProps }) => (
+              <MessageBubble {...item} />
             )}
-          </ScrollView>
-        </View>
+            style={{ backgroundColor: 'rgba(0,0,0,0.035)' }}
+            contentContainerStyle={{ padding: 16, gap: 16 }}
+            onContentSizeChange={_handleScrollToBottom}
+            onLayout={_handleScrollToBottom}
+            onScroll={_handleScrollPos}
+          />
+        )}
         <View
           style={{
             flexDirection: 'row',
             gap: 8,
-            paddingTop: 24,
-            paddingBottom: inputFocused ? 16 : 32,
+            paddingVertical: 16,
             paddingLeft: 8,
             paddingRight: 16,
             borderTopWidth: 1,
@@ -179,7 +177,7 @@ const ChatRoom = (props: ChatRoomProps) => {
           </View>
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 };
 

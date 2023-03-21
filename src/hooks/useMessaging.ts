@@ -34,6 +34,7 @@ export const useMessaging = (senderId: string, recipientId: string) => {
             table: 'messages',
           },
           (payload: { new: MessageProps }) => {
+            // Append the new message to the array.
             setMessages((previousMessages) => [
               ...previousMessages,
               payload.new,
@@ -48,6 +49,7 @@ export const useMessaging = (senderId: string, recipientId: string) => {
             table: 'messages',
           },
           (payload: { old: MessageProps }) => {
+            // Filter out the deleted message.
             setMessages((previousMessages) => [
               ...previousMessages.filter(
                 (message) => message.id !== payload.old.id
