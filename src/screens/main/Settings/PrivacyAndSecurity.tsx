@@ -1,11 +1,11 @@
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
 
 const PrivacyAndSecurity = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header title='Privacy & Security' />
-    </View>
+    </SafeAreaView>
   );
 };
 export default PrivacyAndSecurity;

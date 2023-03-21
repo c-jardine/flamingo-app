@@ -89,16 +89,23 @@ const ChatRoom = (props: ChatRoomProps) => {
       }}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={Platform.OS === 'ios' && { flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
       >
-        <View style={{ marginTop: -48 }}>
+        <View>
           <Header
             title={profile?.first_name!}
             subtitle={isTyping ? 'Typing...' : 'Offline'}
           />
           {photoUri && (
-            <View style={{ position: 'absolute', top: 62, right: 16 }}>
+            <View
+              style={{
+                position: 'absolute',
+                height: '100%',
+                justifyContent: 'center',
+                right: 16,
+              }}
+            >
               <Image
                 source={{ uri: photoUri }}
                 style={{ aspectRatio: 1, width: 50, borderRadius: 25 }}
@@ -107,26 +114,20 @@ const ChatRoom = (props: ChatRoomProps) => {
           )}
         </View>
         {messages && (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(0,0,0,0.035)',
-            }}
-          >
-            <FlatList
-              ref={flatListRef}
-              data={messages}
-              keyExtractor={(item: MessageProps) => item.id}
-              renderItem={({ item }: { item: MessageProps }) => (
-                <ChatRoomItem {...item} profile={profile!} />
-              )}
-              ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
-              contentContainerStyle={{ padding: 16 }}
-              onContentSizeChange={_handleScrollToBottom}
-              onLayout={_handleScrollToBottom}
-              onScroll={_handleScrollPos}
-            />
-          </View>
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(item: MessageProps) => item.message_id}
+            renderItem={({ item }: { item: MessageProps }) => (
+              <ChatRoomItem {...item} profile={profile!} />
+            )}
+            ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
+            style={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
+            contentContainerStyle={{ padding: 16 }}
+            onContentSizeChange={_handleScrollToBottom}
+            onLayout={_handleScrollToBottom}
+            onScroll={_handleScrollPos}
+          />
         )}
         <View
           style={{

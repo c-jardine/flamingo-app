@@ -16,8 +16,7 @@ const Header = (props: HeaderProps) => {
   return (
     <View
       style={{
-        paddingTop: 64,
-        paddingBottom: 16,
+        paddingVertical: 16,
         overflow: 'hidden',
         borderBottomWidth: 1,
         borderColor: 'rgba(0,0,0,0.1)',
@@ -29,7 +28,7 @@ const Header = (props: HeaderProps) => {
           style={{
             position: 'absolute',
             zIndex: 1,
-            top: 55,
+            top: 10,
             left: 16,
             padding: 8,
             borderRadius: 32,

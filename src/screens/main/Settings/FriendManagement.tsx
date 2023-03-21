@@ -1,12 +1,11 @@
-import { Text } from '@rneui/themed';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
 
 const FriendManagement = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header title='Friends' />
-    </View>
+    </SafeAreaView>
   );
 };
 export default FriendManagement;

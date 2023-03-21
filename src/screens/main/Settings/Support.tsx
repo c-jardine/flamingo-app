@@ -1,11 +1,11 @@
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
 
 const Support = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header title='Support' />
-    </View>
+    </SafeAreaView>
   );
 };
 export default Support;

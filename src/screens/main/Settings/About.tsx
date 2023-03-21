@@ -1,15 +1,16 @@
 import { View } from 'react-native';
 import { Header } from '../../../components/core';
 import Constants from 'expo-constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const About = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header
         title='About'
         subtitle={`Version: ${Constants.manifest?.version}`}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 export default About;

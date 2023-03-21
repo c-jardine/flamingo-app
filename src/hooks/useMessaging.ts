@@ -3,10 +3,10 @@ import { Alert } from 'react-native';
 import { supabase } from '../supabase';
 
 export interface MessageProps {
-  id: string;
+  message_id: string;
+  conversation_id: string;
   created_at: string;
   updated_at: string;
-  conversation: IdleDeadline;
   sender_id: string;
   recipient_id: string;
   body: string;
@@ -55,7 +55,7 @@ export const useMessaging = (senderId: string, recipientId: string) => {
             // Filter out the deleted message.
             setMessages((previousMessages) => [
               ...previousMessages.filter(
-                (message) => message.id !== payload.old.id
+                (message) => message.message_id !== payload.old.message_id
               ),
             ]);
           }

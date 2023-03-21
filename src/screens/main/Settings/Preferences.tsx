@@ -1,11 +1,11 @@
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
 
 const Preferences = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header title='Preferences' />
-    </View>
+    </SafeAreaView>
   );
 };
 export default Preferences;

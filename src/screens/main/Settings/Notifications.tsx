@@ -1,11 +1,11 @@
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
 
 const Notifications = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header title='Notifications' />
-    </View>
+    </SafeAreaView>
   );
 };
 export default Notifications;
