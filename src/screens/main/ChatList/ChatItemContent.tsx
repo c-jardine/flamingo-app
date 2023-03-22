@@ -7,7 +7,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { AuthContext } from '../../../contexts';
 import { MainStackParamList } from '../../../navigators/MainNavigator';
 import { ChatListItemProps } from '../../../types';
-import { Poppins } from '../../../utils';
+import { Poppins, formatDate } from '../../../utils';
 
 interface ChatItemContentProps extends ChatListItemProps {
   photoUri: string;
@@ -29,7 +29,7 @@ const ChatItemContent = (props: ChatItemContentProps) => {
       onPress={() =>
         navigate('ChatRoom', {
           senderId: session?.user.id!,
-          receiverId: props.other_profile_id!,
+          receiverId: props.other_user_id!,
         })
       }
     >
@@ -48,12 +48,12 @@ const ChatItemContent = (props: ChatItemContentProps) => {
       </View>
       <View style={{ flex: 1 }}>
         <Text style={{ fontFamily: Poppins.SEMIBOLD, fontSize: 18 }}>
-          {props.other_first_name} {props.other_last_name}
+          {props.other_user_first_name} {props.other_user_last_name}
         </Text>
         <Text style={{ fontFamily: Poppins.REGULAR, color: 'rgba(0,0,0,0.5)' }}>
-          {props.latest_message}
+          {props.last_message}
         </Text>
-        {props.latest_message_time && (
+        {props.last_message_date && (
           <Text
             style={{
               fontFamily: Poppins.REGULAR,
@@ -62,10 +62,7 @@ const ChatItemContent = (props: ChatItemContentProps) => {
               alignSelf: 'flex-end',
             }}
           >
-            {format(
-              new Date(props.latest_message_time),
-              'MM/dd/yyyy | hh:mm a'
-            )}
+            {formatDate(props.last_message_date)}
           </Text>
         )}
       </View>

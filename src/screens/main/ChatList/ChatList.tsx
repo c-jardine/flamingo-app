@@ -1,19 +1,20 @@
 import { useTheme } from '@rneui/themed';
 import React from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../../../components/core';
-import { useChats } from '../../../hooks';
+import { useConversations } from '../../../hooks';
 import { ChatListItemProps } from '../../../types';
-import ChatDisplay from './ChatItem';
+import ChatItem from './ChatItem';
 
 const ChatList = () => {
   const { theme } = useTheme();
-  const { loading, chats } = useChats();
+  const { conversations } = useConversations(1);
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header noNav title='Messages' subtitle='No new messages' />
-      {loading ? (
+      {!conversations ? (
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
@@ -21,14 +22,14 @@ const ChatList = () => {
         </View>
       ) : (
         <FlatList
-          data={chats}
-          keyExtractor={(item) => item.id}
+          data={conversations}
+          keyExtractor={(item) => item.conversation_id}
           renderItem={({ item }: { item: ChatListItemProps }) => (
-            <ChatDisplay {...item} />
+            <ChatItem {...item} />
           )}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

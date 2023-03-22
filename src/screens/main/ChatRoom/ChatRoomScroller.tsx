@@ -17,12 +17,12 @@ const ChatRoomScroller = (props: {
   const { scrollToBottom, handleScroll } = useScrollPos(flatListRef);
 
   return (
-    <>
+    <View style={{flex: 1}}>
       {messages.length > 0 && (
         <FlatList
           ref={flatListRef}
           data={messages}
-          keyExtractor={(item: MessageProps) => item.message_id}
+          keyExtractor={(item: MessageProps) => item.id}
           renderItem={({ item }: { item: MessageProps }) => (
             <ChatRoomItem {...item} profile={profile!} />
           )}
@@ -34,7 +34,7 @@ const ChatRoomScroller = (props: {
           onScroll={handleScroll}
         />
       )}
-    </>
+    </View>
   );
 };
 

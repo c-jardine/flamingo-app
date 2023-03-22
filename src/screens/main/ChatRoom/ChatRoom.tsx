@@ -23,10 +23,12 @@ const ChatRoom = (props: ChatRoomProps) => {
   const { loading, profile } = useProfile(props.route.params.receiverId!);
 
   // Get the conversation's messages.
-  const { conversationId, messages, createMessage } = useMessaging(
-    sender?.user.id!,
-    profile?.id!
-  );
+  const {
+    loading: conversationLoading,
+    conversationId,
+    messages,
+    createMessage,
+  } = useMessaging(sender?.user.id!, profile?.id!);
 
   // Input state.
   // TODO: Replace with react-hook-form.
@@ -46,7 +48,7 @@ const ChatRoom = (props: ChatRoomProps) => {
     setMessage('');
   };
 
-  if (loading) {
+  if (loading || conversationLoading) {
     return <SplashScreen />;
   }
 

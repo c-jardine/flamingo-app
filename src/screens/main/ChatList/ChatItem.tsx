@@ -4,7 +4,7 @@ import ChatItemContent from './ChatItemContent';
 import ChatItemSkeleton from './ChatItemSkeleton';
 
 const ChatItem = (props: ChatListItemProps) => {
-  const { loading, photoUri } = useDownloadPhoto(props.other_avatar_url);
+  const { loading, photoUri } = useDownloadPhoto(props.other_user_avatar_url);
 
   if (loading || !photoUri) {
     return <ChatItemSkeleton />;
